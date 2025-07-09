@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Models;
-
+use Laravel\Sanctum\HasApiTokens;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use HasApiTokens;
+
     protected $fillable = ['name', 'email', 'password', 'role'];
 
     public function addresses(){
@@ -14,7 +16,7 @@ class User extends Authenticatable
     }
 
     public function cart(){
-        return $this->hasOne(Carts::class);
+        return $this->hasOne(Cart::class);
     }
 
     public function orders(){
