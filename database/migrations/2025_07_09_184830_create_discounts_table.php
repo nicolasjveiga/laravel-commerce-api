@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('description');
             $table->date('startDate');
             $table->date('endDate');
-            $table->decimal('discoutPercentage', 5, 2);
+            $table->decimal('discountPercentage', 5, 2);
             $table->timestamps();
         });
     }
