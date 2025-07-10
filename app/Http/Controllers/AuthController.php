@@ -2,52 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Hash;
-
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    protected $authService;
+
+    public function __construct(AuthService $authService)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'role' => 'in:CLIENT,ADMIN,MODERATOR',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role' =>  $request->role ?? 'CLIENT',
-        ]);
-        
-        $token = $user->createToken('UserToken')->plainTextToken;
-
-        return response()->json(['user' => $user, 'token' => $token], 201);
+        $this->authService = $authService;
     }
 
-    public function login(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        $result = $this->authService->register($request->validated());
+        return response()->json($result, 201);
+    }
 
-        $user = User::where('email', $request->email)->first();
-
-        if( ! $user || ! Hash::check($request->password, $user->password) ) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
-        }
-
-        $token = $user->createToken('UserToken')->plainTextToken;
-
-        return response()->json(['user' => $user, 'token' => $token]);
+    public function login(LoginRequest $request)
+    {
+        $result = $this->authService->login($request->validated());
+        return response()->json($result);
     }
 }
