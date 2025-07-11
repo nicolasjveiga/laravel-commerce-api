@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -18,12 +19,16 @@ class ProductController extends Controller
 
     public function index()
     {
-        return response()->json(['message' => 'List of products']);
+        $products = Product::with('category')->get();
+        
+        return response()->json($products);
     }
 
-    public function show($id)
+    public function show(Product $product)
     {
-        return response()->json(['message' => "Product details for ID: $id"]);
+        $product->load('category');
+        
+        return response()->json($product);
     }
 
     public function store(StoreProductRequest $request)
@@ -35,13 +40,19 @@ class ProductController extends Controller
         return response()->json($product, 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        return response()->json(['message' => "Product ID: $id updated successfully"]);
+        $validated = $request->validated();
+
+        $product = $this->productService->updateProduct($product, $validated);
+        
+        return response()->json($product);
     }
 
-    public function destroy($id)
+     public function destroy(Product $product)
     {
-        return response()->json(['message' => "Product ID: $id deleted successfully"]);
+        $this->productService->deleteProduct($product);
+        
+        return response()->json(null, 204);
     }
 }
