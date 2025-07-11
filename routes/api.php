@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum', 'role:ADMIN'])->group(function () {
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
-Route::middleware(['auth:sanctum', 'role:ADMIN,MODERATOR'])->group(function (){
+Route::middleware(['auth:sanctum', 'role:MODERATOR'])->group(function (){
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');

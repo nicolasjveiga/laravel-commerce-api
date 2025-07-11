@@ -14,7 +14,7 @@ class CategoryService
     public function updateCategory($category, array $data)
     {
         $category->update($data);
-        
+
         return $category;
     }
 
