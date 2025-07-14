@@ -88,4 +88,26 @@ class CartTest extends TestCase
 
         $response->assertNoContent();
     }
+
+    public function test_user_can_clear_cart()
+    {
+        $auth = $this->authenticate();
+        $user = $auth['user'];
+
+        $cart = $user->cart()->firstOrCreate(['user_id' => $user->id]);
+        $cart->refresh();
+
+        $product1 = Product::factory()->create(['stock' => 10, 'price' => 10.00]);
+        $product2 = Product::factory()->create(['stock' => 10, 'price' => 20.00]);
+
+        $cart->items()->create(['product_id' => 1, 'quantity' => 1, 'unitPrice' => 10.00]);
+        $cart->items()->create(['product_id' => 2, 'quantity' => 2, 'unitPrice' => 20.00]);
+
+        $response = $this->deleteJson('/api/cart', [], [
+            'Authorization' => $auth['Authorization']
+        ]);
+
+        $response->assertNoContent();
+        $this->assertDatabaseCount('cart_items', 0);
+    }
 }
