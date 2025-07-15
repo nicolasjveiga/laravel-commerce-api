@@ -90,6 +90,7 @@ class OrderService
 
     public function updateOrderStatus(Order $order, string $status){
         $order->update(['status' => $status]);
+        return $order->fresh();
     }
 
 
