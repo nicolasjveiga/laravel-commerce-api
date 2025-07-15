@@ -14,10 +14,10 @@ class UpdateCouponRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string',
-            'startDate' => 'required|date',
-            'endDate' => 'required|date|after_or_equal:startDate',
-            'discountPercentage' => 'required|numeric|min:0|max:100'
+            'code' => 'sometimes|string',
+            'startDate' => 'sometimes|date',
+            'endDate' => 'sometimes|date|after_or_equal:startDate',
+            'discountPercentage' => 'sometimes|numeric|min:0|max:100'
         ];
     }
 }

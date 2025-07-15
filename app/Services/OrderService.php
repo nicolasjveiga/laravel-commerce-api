@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as CARBON;
 use App\Models\Cart;
+use App\Models\Coupon;
 
 class OrderService
 {
@@ -16,6 +17,10 @@ class OrderService
         return DB::transaction(function () use ($data) {
             $user = Auth::user();
             $cart = Cart::where('user_id', $user->id)->with('items.product.discounts')->firstOrFail();
+
+            if ($cart->items->isEmpty()) {
+                abort(400, 'Cart is empty');
+            }
 
             $total = 0;
 
@@ -27,32 +32,28 @@ class OrderService
                         ->sortByDesc('discountPercentage')
                         ->first();
 
-                $total += $item->unitPrice * $item->quantity;
-                if (isset($item->product->discount)) {
-                    $total -= ($item->product->discount / 100) * $total;
+                if ($discount) {
+                    $price = $price * (1 - floatval($discount->discountPercentage) / 100);
                 }
-            }
-
-            if($discount){
-                $price = $price * (1 - $discount->discountPercentage / 100);
+                $total += $price * $item->quantity;
             }
 
             $coupon = null;
             if(!empty($data['coupon_id'])) {
                 $coupon = Coupon::where('id', $data['coupon_id'])
                     ->where('startDate', '<=', now())
-                    ->where('endDate', '<=', now())
+                    ->where('endDate', '>=', now())
                     ->first();
             }
 
-            if($coupon) {
-                $total *= (1 - $coupon->discountPercentage / 100);
+            if ($coupon) {
+                $total = $total * (1 - floatval($coupon->discountPercentage) / 100);
             }
 
             $order = Order::create([
                 'user_id' => $user->id,
                 'address_id' => $data['address_id'],
-                'coupon_id' => $coupon_id ?? null,
+                'coupon_id' => $coupon ? $coupon->id : null,
                 'orderDate' => CARBON::now(),
                 'status' => 'PENDING',
                 'totalAmount' => $total
