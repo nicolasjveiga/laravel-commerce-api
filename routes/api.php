@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\AddressController;
@@ -21,6 +22,12 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 
 Route::middleware(['auth:sanctum', 'role:ADMIN'])->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod'])->name('register.mod');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupon.index');
     Route::post('/coupons', [CouponController::class, 'store'])->name('coupon.store');

@@ -103,7 +103,6 @@ class OrderTest extends TestCase
         $address = Address::factory()->create(['user_id' => $user->id]);
         $this->setupCart($user);
 
-        // Cria um pedido
         $this->postJson('/api/orders', [
             'address_id' => $address->id,
         ], [
