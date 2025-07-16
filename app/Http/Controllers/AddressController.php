@@ -19,40 +19,29 @@ class AddressController extends Controller
 
     public function index()
     {
-        $addresses = Address::with('user')->get();
-
-        return response()->json($addresses);
+        return response()->json($this->addressService->listAll());
     }
 
     public function show(Address $address)
     {
-        $address->load('user');
-
-        return response()->json($address);
+        return response()->json($this->addressService->show($address));
     }
 
     public function store(StoreAddressRequest $request)
     {
-        $validated = $request->validated();
-
-        $address = $this->addressService->createAddress($validated);
-
+        $address = $this->addressService->create($request->validated());
         return response()->json($address, 201);
     }
 
     public function update(UpdateAddressRequest $request, Address $address)
     {
-        $validated = $request->validated();
-
-        $address = $this->addressService->updateAddress($address, $validated);
-    
+        $address = $this->addressService->update($address, $request->validated());
         return response()->json($address);
     }
 
     public function destroy(Address $address)
     {
-        $this->addressService->deleteAddress($address);
-
+        $this->addressService->delete($address);
         return response()->json(null, 204);
     }
 }
