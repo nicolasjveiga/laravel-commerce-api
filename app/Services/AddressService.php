@@ -16,7 +16,7 @@ class AddressService
 
     public function listAll()
     {
-        return Address::all();
+        return $this->addressRepo->all();
     }
 
     public function show(Address $address)
