@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCartItemRequest;
+use App\Http\Requests\UpdateCartRequest;
 
 class CartController extends Controller
 {
@@ -29,11 +30,9 @@ class CartController extends Controller
         return response()->json($item, 201);
     }
 
-    public function update(Request $request, CartItem $cartItem)
+    public function update(UpdateCartRequest $request, CartItem $cartItem)
     {
-        $validated = $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
+        $validated = $request->validated();
         $item = $this->cartService->updateItem($cartItem, $validated['quantity']);
         return response()->json($item);
     }

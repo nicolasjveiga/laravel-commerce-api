@@ -29,12 +29,12 @@ class CategoryService
         return $this->categoryRepo->create($data);
     }
 
-    public function update($category, array $data): Category
+    public function update(Category $category, array $data): Category
     {
         return $this->categoryRepo->update($category, $data);
     }
 
-    public function delete($category): Category
+    public function delete(Category $category): Category
     {
         $this->categoryRepo->delete($category);
         return $category;
