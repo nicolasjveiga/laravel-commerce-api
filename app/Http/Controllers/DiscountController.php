@@ -19,7 +19,8 @@ class DiscountController extends Controller
 
     public function index()
     {
-        return response()->json(Discount::all());
+        $discounts = $this->discountService->listAll();
+        return response()->json($discounts);
     }
 
     public function store(StoreDiscountRequest $request)

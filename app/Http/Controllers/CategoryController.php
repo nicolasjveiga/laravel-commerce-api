@@ -19,40 +19,29 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::with('products')->get();
-
-        return response()->json($categories);
+        return response()->json($this->categoryService->listAll());
     }
 
     public function show(Category $category)
     {
-        $category->load('products'); 
-
-        return response()->json($category);
+        return response()->json($this->categoryService->show($category));
     }
 
     public function store(StoreCategoryRequest $request)
     {
-        $validated = $request->validated();
-
-        $category = $this->categoryService->createCategory($validated);
-
+        $category = $this->categoryService->create($request->validated());
         return response()->json($category, 201);
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $validated = $request->validated();
-
-        $category = $this->categoryService->updateCategory($category, $validated);
-
+        $category = $this->categoryService->update($category, $request->validated());
         return response()->json($category);
     }
 
     public function destroy(Category $category)
     {
-        $this->categoryService->deleteCategory($category);
-
+        $this->categoryService->delete($category);
         return response()->json(null, 204);
     }
 }

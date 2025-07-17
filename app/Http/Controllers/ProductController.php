@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Services\ProductService;
-use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Services\ProductService;
 
 class ProductController extends Controller
 {
@@ -19,40 +18,29 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::with('category')->get();
-        
-        return response()->json($products);
+        return response()->json($this->productService->listAll());
     }
 
     public function show(Product $product)
     {
-        $product->load('category');
-        
-        return response()->json($product);
+        return response()->json($this->productService->show($product));
     }
 
     public function store(StoreProductRequest $request)
     {
-        $validated = $request->validated();
-
-        $product = $this->productService->createProduct($validated);
-        
+        $product = $this->productService->create($request->validated());
         return response()->json($product, 201);
     }
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $validated = $request->validated();
-
-        $product = $this->productService->updateProduct($product, $validated);
-        
+        $product = $this->productService->update($product, $request->validated());
         return response()->json($product);
     }
 
-     public function destroy(Product $product)
+    public function destroy(Product $product)
     {
-        $this->productService->deleteProduct($product);
-        
+        $this->productService->delete($product);
         return response()->json(null, 204);
     }
 }

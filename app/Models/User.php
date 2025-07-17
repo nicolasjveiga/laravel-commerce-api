@@ -6,7 +6,9 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Testing\Fluent\Concerns\Has;
+use App\Models\Address;
+use App\Models\Cart;
+use App\Models\Order;
 
 class User extends Authenticatable
 {

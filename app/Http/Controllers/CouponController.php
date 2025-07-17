@@ -18,7 +18,7 @@ class CouponController extends Controller
 
     public function index()
     {
-        return response()->json(Coupon::all());
+        return response()->json($this->couponService->listAll());
     }
 
     public function store(StoreCouponRequest $request)

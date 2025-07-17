@@ -3,22 +3,39 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Repositories\ProductRepository;
 
 class ProductService
 {
-    public function createProduct(array $data): Product
+    protected $productRepo;
+
+    public function __construct(ProductRepository $productRepo)
     {
-        return Product::create($data);
+        $this->productRepo = $productRepo;
     }
 
-    public function updateProduct(Product $product, array $data): Product
+    public function listAll()
     {
-        $product->update($data);
-        return $product;
+        return $this->productRepo->all();
     }
 
-    public function deleteProduct(Product $product): void
+    public function show(Product $product)
     {
-        $product->delete();
+        return $this->productRepo->find($product);
+    }
+
+    public function create(array $data): Product
+    {
+        return $this->productRepo->create($data);
+    }
+
+    public function update(Product $product, array $data): Product
+    {
+        return $this->productRepo->update($product, $data);
+    }
+
+    public function delete(Product $product): void
+    {
+        $this->productRepo->delete($product);
     }
 }

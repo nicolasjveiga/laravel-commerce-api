@@ -3,22 +3,35 @@
 namespace App\Services;
 
 use App\Models\Coupon;
+use App\Repositories\CouponRepository;
 
 class CouponService
 {
+    protected $couponRepo;
+    
+    public function __construct(CouponRepository $couponRepo)
+    {
+        $this->couponRepo = $couponRepo;
+    }
+
+    public function listAll()
+    {
+        return $this->couponRepo->all();
+    }
+
     public function create(array $data): Coupon
     {
-        return Coupon::create($data);
+        return $this->couponRepo->create($data);
     }
 
     public function update(Coupon $coupon, array $data): Coupon
     {
-        $coupon->update($data);
-        return $coupon;
+        return $this->couponRepo->update($coupon, $data);
     }
 
-    public function delete(Coupon $coupon): void
+    public function delete(Coupon $coupon): Coupon
     {
-        $coupon->delete();
+        $this->couponRepo->delete($coupon);
+        return $coupon;
     }
 }
