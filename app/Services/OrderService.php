@@ -1,16 +1,22 @@
-<?php 
+<?php
 
 namespace App\Services;
 
 use App\Models\Order;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon as CARBON;
-use App\Models\Cart;
 use App\Models\Coupon;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
+use Illuminate\Support\Facades\DB;
+use App\Repositories\OrderRepository;
 
 class OrderService
 {
+    protected $orderRepo;
+
+    public function __construct(OrderRepository $orderRepo)
+    {
+        $this->orderRepo = $orderRepo;
+    }
 
     public function createOrder(array $data)
     {
@@ -18,95 +24,93 @@ class OrderService
             $user = Auth::user();
             $cart = Cart::where('user_id', $user->id)->with('items.product.discounts')->firstOrFail();
 
-            if ($cart->items->isEmpty()) {
-                abort(400, 'Cart is empty');
-            }
+            $this->validateCart($cart);
 
-            $total = 0;
+            $total = $this->calculateTotal($cart, $data['coupon_id'] ?? null);
 
-            foreach ($cart->items as $item) {
-                $price = $item->product->price;
-                $discount = $item->product->discounts
-                        ->where('startDate', '<=', now())
-                        ->where('endDate', '>=', now())
-                        ->sortByDesc('discountPercentage')
-                        ->first();
-
-                if ($discount) {
-                    $price = $price * (1 - floatval($discount->discountPercentage) / 100);
-                }
-                $total += $price * $item->quantity;
-            }
-
-            $coupon = null;
-            if(!empty($data['coupon_id'])) {
-                $coupon = Coupon::where('id', $data['coupon_id'])
-                    ->where('startDate', '<=', now())
-                    ->where('endDate', '>=', now())
-                    ->first();
-            }
-
-            if ($coupon) {
-                $total = $total * (1 - floatval($coupon->discountPercentage) / 100);
-            }
-
-            $order = Order::create([
-                'user_id' => $user->id,
-                'address_id' => $data['address_id'],
-                'coupon_id' => $coupon ? $coupon->id : null,
-                'orderDate' => CARBON::now(),
-                'status' => 'PENDING',
-                'totalAmount' => $total
+            $order = $this->orderRepo->createOrder([
+                'user_id'     => $user->id,
+                'address_id'  => $data['address_id'],
+                'coupon_id'   => $this->coupon?->id,
+                'orderDate'   => now(),
+                'status'      => 'PENDING',
+                'totalAmount' => $total,
             ]);
 
-            foreach ($cart->items as $item) {
-                $order->items()->create([
-                    'product_id' => $item->product_id,
-                    'quantity' => $item->quantity,
-                    'unitPrice' => $item->unitPrice,
-                    'discount' => $item->discount ?? 0,
-                ]);
-            }
-
-            $cart->items()->delete();
+            $this->orderRepo->attachOrderItems($order, $cart->items);
+            $this->orderRepo->clearCartItems($cart);
 
             return $order->load('items.product', 'coupon');
         });
+}
 
+    private ?Coupon $coupon = null;
+
+    private function validateCart($cart): void
+    {
+        if ($cart->items->isEmpty()) {
+            abort(400, 'Cart is empty');
+        }
     }
+
+    private function calculateTotal($cart, ?int $couponId): float
+{
+    $total = 0;
+
+    foreach ($cart->items as $item) {
+        $price = $item->product->price;
+        $discount = $item->product->discounts
+            ->where('startDate', '<=', now())
+            ->where('endDate', '>=', now())
+            ->sortByDesc('discountPercentage')
+            ->first();
+
+        if ($discount) {
+            $price *= (1 - floatval($discount->discountPercentage) / 100);
+        }
+
+        $total += $price * $item->quantity;
+    }
+
+    $this->coupon = $this->orderRepo->getValidCoupon($couponId);
+
+    if ($this->coupon) {
+        $total *= (1 - floatval($this->coupon->discountPercentage) / 100);
+    }
+
+    return $total;
+}
+
 
     public function cancelOrder(Order $order)
     {
-        if (Auth::user()->id !== $order->user_id) {
+        if (Auth::id() !== $order->user_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        if ($order->status === 'CANCELED'|| $order->status === 'COMPLETED') {
+        if (in_array($order->status, ['CANCELED', 'COMPLETED'])) {
             abort(400, 'Order cannot be cancelled');
         }
 
-        $order->update(['status' => 'CANCELED']);
+        $this->orderRepo->cancelOrder($order);
     }
 
-    public function updateOrderStatus(Order $order, string $status){
-        $order->update(['status' => $status]);
-        return $order->fresh();
+    public function updateOrderStatus(Order $order, string $status)
+    {
+        return $this->orderRepo->updateOrderStatus($order, $status);
     }
-
 
     public function getAllOrders()
     {
-        return Order::with(['items' => function($query) {
-        $query->select('id', 'order_id', 'product_id', 'quantity', 'unitPrice');
-        }])->get()->map(function($order) {
-            $order->items = $order->items->map(function($item) {
+        return $this->orderRepo->getAllOrders()->map(function ($order) {
+            $order->items = $order->items->map(function ($item) {
                 return [
                     'product_id' => $item->product_id,
-                    'quantity' => $item->quantity,
-                    'unitPrice' => $item->unitPrice,
+                    'quantity'   => $item->quantity,
+                    'unitPrice'  => $item->unitPrice,
                 ];
             });
-        return $order;
-    });
-}
+            return $order;
+        });
+    }
 }
