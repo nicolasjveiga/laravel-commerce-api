@@ -99,24 +99,14 @@ class OrderService
             abort(400, 'Order cannot be cancelled');
         }
 
-        $this->orderRepo->restoreStockForOrder($order);
         $this->orderRepo->cancelOrder($order);
+        $this->orderRepo->restoreStockForOrder($order);
     }
 
     public function updateOrderStatus(Order $order, string $status)
     {          
         return $this->orderRepo->updateOrderStatus($order, $status);;    
     }
-
-    // public function decreaseStockForOrder(Order $order)
-    // {   
-    //     return $this->orderRepo->updateItemStock($order);
-    // }
-
-    // public function restoreStockForOrder(Order $order)
-    // {
-    //     return $this->orderRepo->cancelresOrder($order);
-    // }
 
     public function getAllOrders()
     {
