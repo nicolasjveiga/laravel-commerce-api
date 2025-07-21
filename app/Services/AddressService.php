@@ -3,25 +3,40 @@
 namespace App\Services;
 
 use App\Models\Address;
+use App\Repositories\AddressRepository;
 
 class AddressService
 {
-    public function createAddress(array $data): Address
+    protected $addressRepo;
+
+    public function __construct(AddressRepository $addressRepo)
     {
-        return Address::create($data); 
+        $this->addressRepo = $addressRepo;
     }
 
-    public function updateAddress(Address $address, array $data): Address
+    public function listAll()
     {
-        $address->update($data);
-
-        return $address;
+        return $this->addressRepo->all();
     }
 
-    public function deleteAddress(Address $address): Address
+    public function show(Address $address)
     {
-        $address->delete();
-        
+        return $this->addressRepo->find($address);
+    }
+
+    public function create(array $data): Address
+    {
+        return $this->addressRepo->create($data); 
+    }
+
+    public function update(Address $address, array $data): Address
+    {
+        return $this->addressRepo->update($address, $data);
+    }
+
+    public function delete(Address $address): Address
+    {
+        $this->addressRepo->delete($address);
         return $address;
     }
 }

@@ -3,23 +3,40 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Repositories\CategoryRepository;
 
 class CategoryService
 {
-    public function createCategory(array $data)
+    protected $categoryRepo;
+
+    public function __construct(CategoryRepository $categoryRepo)
     {
-        return Category::create($data);
+        $this->categoryRepo = $categoryRepo;
     }
 
-    public function updateCategory($category, array $data)
+    public function listAll()
     {
-        $category->update($data);
+        return $this->categoryRepo->all();
+    }
 
+    public function show(Category $category)
+    {
+        return $this->categoryRepo->find($category);
+    }
+
+    public function create(array $data): Category
+    {
+        return $this->categoryRepo->create($data);
+    }
+
+    public function update(Category $category, array $data): Category
+    {
+        return $this->categoryRepo->update($category, $data);
+    }
+
+    public function delete(Category $category): Category
+    {
+        $this->categoryRepo->delete($category);
         return $category;
-    }
-
-    public function deleteCategory($category)
-    {
-        $category->delete();
     }
 }

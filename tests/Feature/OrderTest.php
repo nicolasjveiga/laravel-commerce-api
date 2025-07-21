@@ -115,7 +115,7 @@ class OrderTest extends TestCase
 
         $response->assertOk()
                 ->assertJsonStructure([['id', 'address_id', 'items']]);
-}
+    }
 
     public function test_user_can_cancel_order()
     {
@@ -156,5 +156,115 @@ class OrderTest extends TestCase
         $response->assertOk()
                  ->assertJsonFragment(['status' => 'COMPLETED']);
         $this->assertDatabaseHas('orders', ['id' => $order->id, 'status' => 'COMPLETED']);
+    }
+
+    public function test_cannot_create_order_when_product_has_insufficient_stock()
+    {
+        $auth = $this->authenticate();
+        $user = $auth['user'];
+        $address = Address::factory()->create(['user_id' => $user->id]);
+
+        $product = Product::factory()->create(['stock' => 1, 'price' => 100]);
+        $cart = Cart::factory()->create(['user_id' => $user->id]);
+        CartItem::factory()->create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 2,
+            'unitPrice' => $product->price,
+        ]);
+
+        $response = $this->postJson('/api/orders', [
+            'address_id' => $address->id,
+        ], [
+            'Authorization' => $auth['Authorization']
+        ]);
+
+        $response->assertStatus(400)
+                ->assertJsonFragment(['message' => "Product {$product->name} does not have enough stock"]);
+    }
+
+    public function test_stock_decreases_after_order_creation()
+    {
+        $auth = $this->authenticate();
+        $user = $auth['user'];
+        $address = Address::factory()->create(['user_id' => $user->id]);
+
+        $product = $this->setupCart($user);
+
+        $this->postJson('/api/orders', [
+            'address_id' => $address->id,
+        ], [
+            'Authorization' => $auth['Authorization']
+        ]);
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'stock' => 8,
+        ]);
+    }
+    public function test_stock_is_restored_on_order_cancel()
+    {
+        $auth = $this->authenticate();
+        $user = $auth['user'];
+        $address = Address::factory()->create(['user_id' => $user->id]);
+        $product = $this->setupCart($user);
+
+        $orderResponse = $this->postJson('/api/orders', [
+            'address_id' => $address->id,
+        ], [
+            'Authorization' => $auth['Authorization']
+        ]);
+
+        $orderId = $orderResponse->json('id');
+
+        $this->postJson("/api/orders/{$orderId}/cancel", [], [
+            'Authorization' => $auth['Authorization']
+        ]);
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'stock' => 10, 
+        ]);
+    }
+
+    public function test_user_cannot_cancel_order_of_another_user() //falhando
+    {
+        $auth1 = $this->authenticate();
+        $user1 = $auth1['user'];
+        $address = Address::factory()->create(['user_id' => $user1->id]);
+        $this->setupCart($user1);
+
+        $orderResponse = $this->postJson('/api/orders', [
+            'address_id' => $address->id,
+        ], [
+            'Authorization' => $auth1['Authorization']
+        ]);
+
+        $orderId = $orderResponse->json('id');
+
+        $auth2 = $this->authenticate();
+
+        $response = $this->postJson("/api/orders/{$orderId}/cancel", [], [
+            'Authorization' => $auth2['Authorization']
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_cannot_cancel_completed_or_already_canceled_order()
+    {
+        $auth = $this->authenticate();
+        $user = $auth['user'];
+        $order = Order::factory()->create([
+            'user_id' => $user->id,
+            'status' => 'COMPLETED'
+        ]);
+
+        $response = $this->postJson("/api/orders/{$order->id}/cancel", [], [
+            'Authorization' => $auth['Authorization']
+        ]);
+
+        $response->assertStatus(400)
+                ->assertJsonFragment(['message' => 'Order cannot be cancelled']);
     }
 }
