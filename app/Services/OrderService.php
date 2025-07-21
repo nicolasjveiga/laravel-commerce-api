@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\OrderRepository;
+use App\Models\Product;
 
 class OrderService
 {
@@ -39,10 +40,11 @@ class OrderService
 
             $this->orderRepo->attachOrderItems($order, $cart->items);
             $this->orderRepo->clearCartItems($cart);
+            $this->orderRepo->decreaseStockForOrder($order);
 
             return $order->load('items.product', 'coupon');
         });
-}
+    }
 
     private ?Coupon $coupon = null;
 
@@ -51,36 +53,41 @@ class OrderService
         if ($cart->items->isEmpty()) {
             abort(400, 'Cart is empty');
         }
+
+        foreach ($cart->items as $item) {
+            if ($item->product->stock < $item->quantity) {
+                abort(400, "Product {$item->product->name} does not have enough stock");
+            }
+        }
     }
 
     private function calculateTotal($cart, ?int $couponId): float
-{
-    $total = 0;
+    {
+        $total = 0;
 
-    foreach ($cart->items as $item) {
-        $price = $item->product->price;
-        $discount = $item->product->discounts
-            ->where('startDate', '<=', now())
-            ->where('endDate', '>=', now())
-            ->sortByDesc('discountPercentage')
-            ->first();
+        foreach ($cart->items as $item) {
+            $price = $item->product->price;
+            $discount = $item->product->discounts
+                ->where('startDate', '<=', now())
+                ->where('endDate', '>=', now())
+                ->sortByDesc('discountPercentage')
+                ->first();
 
-        if ($discount) {
-            $price *= (1 - floatval($discount->discountPercentage) / 100);
+            if ($discount) {
+                $price *= (1 - floatval($discount->discountPercentage) / 100);
+            }
+
+            $total += $price * $item->quantity;
         }
 
-        $total += $price * $item->quantity;
+        $this->coupon = $this->orderRepo->getValidCoupon($couponId);
+
+        if ($this->coupon) {
+            $total *= (1 - floatval($this->coupon->discountPercentage) / 100);
+        }
+
+        return $total;
     }
-
-    $this->coupon = $this->orderRepo->getValidCoupon($couponId);
-
-    if ($this->coupon) {
-        $total *= (1 - floatval($this->coupon->discountPercentage) / 100);
-    }
-
-    return $total;
-}
-
 
     public function cancelOrder(Order $order)
     {
@@ -92,13 +99,24 @@ class OrderService
             abort(400, 'Order cannot be cancelled');
         }
 
+        $this->orderRepo->restoreStockForOrder($order);
         $this->orderRepo->cancelOrder($order);
     }
 
     public function updateOrderStatus(Order $order, string $status)
-    {
-        return $this->orderRepo->updateOrderStatus($order, $status);
+    {          
+        return $this->orderRepo->updateOrderStatus($order, $status);;    
     }
+
+    // public function decreaseStockForOrder(Order $order)
+    // {   
+    //     return $this->orderRepo->updateItemStock($order);
+    // }
+
+    // public function restoreStockForOrder(Order $order)
+    // {
+    //     return $this->orderRepo->cancelresOrder($order);
+    // }
 
     public function getAllOrders()
     {

@@ -54,6 +54,24 @@ class OrderRepository
         return $order->fresh();
     }
 
+    public function decreaseStockForOrder(Order $order)
+    {
+        foreach ($order->items as $item) {
+            $product = $item->product;
+            $product->stock -= $item->quantity;
+            $product->save();
+        }
+    }
+
+    public function restoreStockForOrder(Order $order)
+    {
+        foreach ($order->items as $item) {
+            $product = $item->product;
+            $product->stock += $item->quantity;
+            $product->save();
+        }
+    }
+
     public function getAllOrders()
     {
         return Order::with(['items' => function ($query) {
