@@ -3,29 +3,29 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Repositories\UserRepository;
 
 class UserService
 {
-    protected $userModel;
+    protected $userRepo;
 
-    public function __construct(User $userModel)
+    public function __construct(UserRepository $userRepo)
     {
-        $this->userModel = $userModel;
+        $this->userRepo = $userRepo;
     }
 
     public function createUser(array $data): User
     {
-        return $this->userModel->create($data);
+        return $this->userRepo->create($data);
     }
 
     public function updateUser(User $user, array $data): User
     {
-        $user->update($data);
-        return $user;
+        return $this->userRepo->update($user, $data);
     }
 
     public function deleteUser(User $user): void
     {
-        $user->delete();
+        $this->userRepo->delete($user);
     }
 }

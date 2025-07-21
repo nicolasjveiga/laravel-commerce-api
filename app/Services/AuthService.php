@@ -6,13 +6,21 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
+    protected $userRepo;
+
+    public function __construct(UserRepository $userRepo)
+    {
+        $this->userRepo = $userRepo;
+    }
+
     public function register(array $data): array
     {
-        $user = User::create([
+        $user = $this->userRepo->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
@@ -20,13 +28,12 @@ class AuthService
         ]);
 
         $token = $user->createToken('UserToken')->plainTextToken;
-
         return ['user' => $user, 'token' => $token];
     }
 
     public function registerMod(array $data): array
     {
-        $user = User::create([
+        $user = $this->userRepo->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
@@ -34,13 +41,12 @@ class AuthService
         ]);
 
         $token = $user->createToken('UserToken')->plainTextToken;
-
         return ['user' => $user, 'token' => $token];
     }
 
     public function login(array $credentials): array
     {
-        $user = User::where('email', $credentials['email'])->first();
+        $user = $this->userRepo->findByEmail($credentials['email']);
 
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             throw ValidationException::withMessages([
@@ -49,8 +55,6 @@ class AuthService
         }
 
         $token = $user->createToken('UserToken')->plainTextToken;
-
         return ['user' => $user, 'token' => $token];
     }
 }
-
