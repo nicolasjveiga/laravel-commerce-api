@@ -50,7 +50,7 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertCreated()
-                 ->assertJsonFragment(['address_id' => $address->id]);
+                    ->assertJsonFragment(['address_id' => $address->id]);
         $this->assertDatabaseHas('orders', ['address_id' => $address->id]);
     }
 
