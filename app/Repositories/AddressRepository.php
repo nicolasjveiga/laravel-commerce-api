@@ -11,6 +11,11 @@ class AddressRepository
         return Address::all();
     }
 
+    public function listByUser($user)
+    {
+        return $user->addresses()->get();
+    }
+
     public function find(Address $address)
     {
         return $address->load('user');

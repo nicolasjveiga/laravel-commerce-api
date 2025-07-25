@@ -19,11 +19,19 @@ class AddressController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', Address::class);
         return response()->json($this->addressService->listAll());
+    }
+
+    public function myAddresses(Request $request){
+        $user = $request->user();
+        $addresses = $this->addressService->listByUser($user);
+        return response()->json($addresses);
     }
 
     public function show(Address $address)
     {
+        $this->authorize('view', $address);
         return response()->json($this->addressService->show($address));
     }
 
@@ -35,12 +43,14 @@ class AddressController extends Controller
 
     public function update(UpdateAddressRequest $request, Address $address)
     {
+        $this->authorize('update', $address);
         $address = $this->addressService->update($address, $request->validated());
         return response()->json($address);
     }
 
     public function destroy(Address $address)
     {
+        $this->authorize('delete', $address);
         $this->addressService->delete($address);
         return response()->json(null, 204);
     }

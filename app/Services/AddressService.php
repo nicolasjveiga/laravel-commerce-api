@@ -19,6 +19,10 @@ class AddressService
         return $this->addressRepo->all();
     }
 
+    public function listByUser($user){
+        return $this->addressRepo->listByUser($user);
+    }
+
     public function show(Address $address)
     {
         return $this->addressRepo->find($address);
