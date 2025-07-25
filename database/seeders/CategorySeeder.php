@@ -18,7 +18,7 @@ class CategorySeeder extends Seeder
 
         Category::create([
             'name' => 'Moda',
-            'description' => 'RouRoupas, calçados e acessórios para todos os estilos e gêneros.pas',
+            'description' => 'Roupas, calçados e acessórios para todos os estilos e gêneros.',
         ]);
 
         Category::create([
