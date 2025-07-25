@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateStatusRequest;
 use App\Services\OrderService;
 use App\Models\Order;
 
@@ -37,11 +38,9 @@ class OrderController extends Controller
         return response()->json(null, 204);    
     }
 
-    public function updateStatus(Request $request, Order $order)
+    public function updateStatus(UpdateStatusRequest $request, Order $order)
     {
-        $validated = $request->validate([
-            'status' => 'required|string|in:PENDING,PROCESSING,SHIPPED,COMPLETED,CANCELED',
-        ]);
+        $validated = $request->validated();
 
         $order = $this->orderService->updateOrderStatus($order, $validated['status']);
         

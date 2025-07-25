@@ -105,7 +105,13 @@ class OrderService
 
     public function updateOrderStatus(Order $order, string $status)
     {          
-        return $this->orderRepo->updateOrderStatus($order, $status);;    
+        $updatedStatus = $this->orderRepo->updateOrderStatus($order, $status);
+
+        if ($updatedStatus->status === 'CANCELED') {
+            $this->orderRepo->restoreStockForOrder($updatedStatus);
+        }
+
+        return $updatedStatus;    
     }
 
     public function getAllOrders()

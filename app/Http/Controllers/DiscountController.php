@@ -25,7 +25,7 @@ class DiscountController extends Controller
 
     public function store(StoreDiscountRequest $request)
     {
-         return response()->json($this->discountService->create($request->validated()), 201);
+        return response()->json($this->discountService->create($request->validated()), 201);
     }
 
     public function update(UpdateDiscountRequest $request, Discount $discount)

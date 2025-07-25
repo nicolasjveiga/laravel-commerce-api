@@ -63,6 +63,32 @@ services:
         networks:
             - laravel
 
+    prometheus:
+        image: prom/prometheus:latest
+        volumes:
+            - ./docker/prometheus:/etc/prometheus/
+        command:
+            - '--config.file=/etc/prometheus/prometheus.yml'
+        ports:
+            - "9090:9090"
+        networks:
+            - laravel
+
+    grafana:
+        image: grafana/grafana
+        restart: unless-stopped
+        ports:
+            - "3000:3000"
+        volumes:
+            - grafana-storage:/var/lib/grafana
+        depends_on:
+            - prometheus
+        networks:
+            - laravel
+
 networks:
     laravel:
         driver: bridge
+
+volumes:
+    grafana-storage:

@@ -26,6 +26,11 @@ class ProductService
 
     public function create(array $data): Product
     {
+        if(request()->hasFile('image')) {
+            $imagePath = request()->file('image')->store('products', 'public');
+            $data['image'] = $imagePath;
+        }
+
         return $this->productRepo->create($data);
     }
 
