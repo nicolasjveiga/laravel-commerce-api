@@ -38,15 +38,15 @@ class AddressTest extends TestCase
                     ->assertJsonFragment(['street' => 'Rua A']);
     }
 
-    public function test_user_can_list_addresses()
+    public function test_admin_can_list_addresses()
     {
-        $auth = $this->authenticate();
-        $user = $auth['user'];
+        $user = User::factory()->create(['role' => 'ADMIN']);
+        $token = $user->createToken('UserToken')->plainTextToken;
 
         Address::factory()->count(2)->create(['user_id' => $user->id]);
 
         $response = $this->getJson('/api/addresses', [
-            'Authorization' => $auth['Authorization']
+            'Authorization' => "Bearer $token"
         ]);
 
         $response->assertOk()

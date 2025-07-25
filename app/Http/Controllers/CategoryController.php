@@ -29,18 +29,21 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
+        $this->authorize('create', Category::class);
         $category = $this->categoryService->create($request->validated());
         return response()->json($category, 201);
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
+        $this->authorize('update', $category);
         $category = $this->categoryService->update($category, $request->validated());
         return response()->json($category);
     }
 
     public function destroy(Category $category)
     {
+        $this->authorize('delete', $category);
         $this->categoryService->delete($category);
         return response()->json(null, 204);
     }

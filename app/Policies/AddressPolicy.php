@@ -13,7 +13,6 @@ class AddressPolicy
         return $user->role === 'ADMIN';
     }
 
-
     public function view(User $user, Address $address): bool
     {
         return $user->id === $address->user_id;
