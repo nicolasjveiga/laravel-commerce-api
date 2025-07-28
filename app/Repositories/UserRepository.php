@@ -6,6 +6,17 @@ use App\Models\User;
 
 class UserRepository
 {
+
+    public function all()
+    {
+        return User::all();
+    }
+
+    public function find(User $user): User
+    {
+        return $user;
+    }
+
     public function create(array $data): User
     {
         return User::create($data);
