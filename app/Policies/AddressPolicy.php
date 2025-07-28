@@ -10,7 +10,7 @@ class AddressPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role === 'ADMIN';
+        return $user->isAdmin();
     }
 
     public function view(User $user, Address $address): bool

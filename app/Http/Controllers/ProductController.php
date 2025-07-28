@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 
+
 class ProductController extends Controller
 {
     protected $productService;
@@ -28,18 +29,21 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
+        $this->authorize('create', Product::class);
         $product = $this->productService->create($request->validated());
         return response()->json($product, 201);
     }
 
     public function update(UpdateProductRequest $request, Product $product)
     {
+        $this->authorize('update', $product);
         $product = $this->productService->update($product, $request->validated());
         return response()->json($product);
     }
 
     public function destroy(Product $product)
     {
+        $this->authorize('delete', $product);
         $this->productService->delete($product);
         return response()->json(null, 204);
     }
