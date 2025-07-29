@@ -19,6 +19,11 @@ class DiscountService
         return $this->discountRepo->all();
     }
 
+    public function show(Discount $discount)
+    {
+        return $this->discountRepo->find($discount->id);
+    }
+
     public function create(array $data): Discount
     {
         return $this->discountRepo->create($data);

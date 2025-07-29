@@ -32,13 +32,14 @@ Route::middleware(['auth:sanctum', 'role:ADMIN'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupon.index');
-    Route::get('/coupons/{coupon}', [CouponController::class, 'show'])->name('coupon.show');
     Route::post('/coupons', [CouponController::class, 'store'])->name('coupon.store');
+    Route::get('/coupons/{coupon}', [CouponController::class, 'show'])->name('coupon.show');
     Route::put('/coupons/{coupon}', [CouponController::class, 'update'])->name('coupon.update');
     Route::delete('/coupons/{coupon}', [CouponController::class, 'destroy'])->name('coupon.destroy');
 
     Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
     Route::post('/discounts', [DiscountController::class, 'store'])->name('discounts.store');
+    Route::get('/discounts/{discount}', [DiscountController::class, 'show'])->name('discounts.show');
     Route::put('/discounts/{discount}', [DiscountController::class, 'update'])->name('discounts.update');
     Route::delete('/discounts/{discount}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
     
