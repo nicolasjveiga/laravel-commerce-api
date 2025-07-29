@@ -19,6 +19,11 @@ class CouponService
         return $this->couponRepo->all();
     }
 
+    public function show(Coupon $coupon)
+    {
+        return $this->couponRepo->find($coupon->id);
+    }
+
     public function create(array $data): Coupon
     {
         return $this->couponRepo->create($data);

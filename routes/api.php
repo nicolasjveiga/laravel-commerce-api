@@ -32,6 +32,7 @@ Route::middleware(['auth:sanctum', 'role:ADMIN'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupon.index');
+    Route::get('/coupons/{coupon}', [CouponController::class, 'show'])->name('coupon.show');
     Route::post('/coupons', [CouponController::class, 'store'])->name('coupon.store');
     Route::put('/coupons/{coupon}', [CouponController::class, 'update'])->name('coupon.update');
     Route::delete('/coupons/{coupon}', [CouponController::class, 'destroy'])->name('coupon.destroy');

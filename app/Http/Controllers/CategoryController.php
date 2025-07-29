@@ -19,12 +19,16 @@ class CategoryController extends Controller
 
     public function index()
     {
-        return response()->json($this->categoryService->listAll());
+        $this->authorize('viewAny', Category::class);
+        $categories = $this->categoryService->listAll(); 
+        return response()->json($categories, 200);
     }
 
     public function show(Category $category)
     {
-        return response()->json($this->categoryService->show($category));
+        $this->authorize('view', $category);
+        $category = $this->categoryService->show($category);
+        return response()->json($category, 200);
     }
 
     public function store(StoreCategoryRequest $request)
@@ -38,7 +42,7 @@ class CategoryController extends Controller
     {
         $this->authorize('update', $category);
         $category = $this->categoryService->update($category, $request->validated());
-        return response()->json($category);
+        return response()->json($category, 200);
     }
 
     public function destroy(Category $category)
