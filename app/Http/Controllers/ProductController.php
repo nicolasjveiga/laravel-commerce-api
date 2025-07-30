@@ -19,32 +19,50 @@ class ProductController extends Controller
 
     public function index()
     {
-        return response()->json($this->productService->listAll());
+        $this->authorize('viewAny', Product::class);
+
+        $products = $this->productService->listAll();
+        
+        return response()->json($products, 200);
     }
 
     public function show(Product $product)
     {
-        return response()->json($this->productService->show($product));
+        $this->authorize('view', $product);
+        
+        $product = $this->productService->show($product);
+        
+        return response()->json($product, 200);
     }
 
     public function store(StoreProductRequest $request)
     {
         $this->authorize('create', Product::class);
-        $product = $this->productService->create($request->validated());
+    
+        $validated = $request->validated();
+
+        $product = $this->productService->create($validated);
+        
         return response()->json($product, 201);
     }
 
     public function update(UpdateProductRequest $request, Product $product)
     {
         $this->authorize('update', $product);
-        $product = $this->productService->update($product, $request->validated());
+        
+        $validated = $request->validated();
+
+        $product = $this->productService->update($product, $validated);
+        
         return response()->json($product);
     }
 
     public function destroy(Product $product)
     {
         $this->authorize('delete', $product);
+        
         $this->productService->delete($product);
+        
         return response()->json(null, 204);
     }
 }

@@ -20,30 +20,41 @@ class OrderController extends Controller
     
     public function index()
     {
+        $this->authorize('viewAny', Order::class);
+
         $orders = $this->orderService->getAllOrders();
+        
         return response()->json($orders);
     }
 
     public function store(StoreOrderRequest $request)
     {
+        $this->authorize('create', Order::class);
+
         $validated = $request->validated();
+        
         $order = $this->orderService->createOrder($validated);
         
         return response()->json($order, 201);
     }
 
-    public function cancel(Order $order){
-        $this->orderService->cancelOrder($order);
-        
-        return response()->json(null, 204);    
-    }
-
     public function updateStatus(UpdateStatusRequest $request, Order $order)
     {
-        $validated = $request->validated();
+        $this->authorize('update', $order);
 
+        $validated = $request->validated();
+        
         $order = $this->orderService->updateOrderStatus($order, $validated['status']);
         
         return response()->json($order);
+    }
+
+    public function cancel(Order $order)
+    {
+        $this->authorize('cancel', $order);
+
+        $this->orderService->cancelOrder($order);
+        
+        return response()->json(null, 204);    
     }
 }

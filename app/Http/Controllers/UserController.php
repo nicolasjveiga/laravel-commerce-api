@@ -20,33 +20,45 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('viewAny', User::class);
+
         return response()->json($this->userService->listAll());
     }
 
     public function show(User $user)
     {
         $this->authorize('view', $user);
+        
         return response()->json($this->userService->show($user));
     }
 
     public function store(RegisterRequest $request)
     {
         $this->authorize('create', User::class);
-        $user = $this->userService->create($request->validated());
+        
+        $validated = $request->validated();
+
+        $user = $this->userService->create($validated);
+        
         return response()->json($user, 201);
     }
 
     public function update(UpdateUserRequest $request, User $user)
     {
         $this->authorize('update', $user);
-        $user = $this->userService->update($user, $request->validated());
+
+        $validated = $request->validated();
+
+        $user = $this->userService->update($user, $validated);
+        
         return response()->json($user);
     }
 
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);
+
         $this->userService->delete($user);
+
         return response()->json(null, 204);
     }
 }

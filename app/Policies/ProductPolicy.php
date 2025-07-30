@@ -7,12 +7,12 @@ use App\Models\User;
 
 class ProductPolicy
 {
-    public function viewANy(User $user)
+    public function viewANy(?User $user)
     {
         return true;
     }
 
-    public function view(User $user, Product $product)
+    public function view(?User $user, Product $product)
     {
         return true;
     }
