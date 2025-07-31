@@ -11,6 +11,11 @@ class CouponRepository
         return Coupon::all();
     }
 
+    public function find(int $id)
+    {
+        return Coupon::find($id);
+    }
+
     public function create(array $data): Coupon
     {
         return Coupon::create($data);

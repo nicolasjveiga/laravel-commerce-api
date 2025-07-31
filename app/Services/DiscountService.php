@@ -19,6 +19,11 @@ class DiscountService
         return $this->discountRepo->all();
     }
 
+    public function show(Discount $discount)
+    {
+        return $this->discountRepo->find($discount->id);
+    }
+
     public function create(array $data): Discount
     {
         return $this->discountRepo->create($data);
@@ -29,9 +34,8 @@ class DiscountService
         return $this->discountRepo->update($discount, $data);
     }
 
-    public function delete(Discount $discount):Discount
+    public function delete(Discount $discount): void
     {
         $this->discountRepo->delete($discount);
-        return $discount;
     }
 }

@@ -19,6 +19,11 @@ class CouponService
         return $this->couponRepo->all();
     }
 
+    public function show(Coupon $coupon)
+    {
+        return $this->couponRepo->find($coupon->id);
+    }
+
     public function create(array $data): Coupon
     {
         return $this->couponRepo->create($data);
@@ -29,9 +34,8 @@ class CouponService
         return $this->couponRepo->update($coupon, $data);
     }
 
-    public function delete(Coupon $coupon): Coupon
+    public function delete(Coupon $coupon): void
     {
         $this->couponRepo->delete($coupon);
-        return $coupon;
     }
 }

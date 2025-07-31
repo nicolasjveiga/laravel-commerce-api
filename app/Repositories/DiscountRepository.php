@@ -11,6 +11,11 @@ class DiscountRepository
         return Discount::all();
     }
 
+    public function find(int $id)
+    {
+        return Discount::find($id);
+    }
+
     public function create(array $data): Discount
     {
         return Discount::create($data);

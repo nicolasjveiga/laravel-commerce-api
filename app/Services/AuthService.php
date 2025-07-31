@@ -20,27 +20,19 @@ class AuthService
 
     public function register(array $data): array
     {
-        $user = $this->userRepo->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'role' => 'CLIENT',
-        ]);
+        $user = $this->userRepo->create($data, 'CLIENT');
 
         $token = $user->createToken('UserToken')->plainTextToken;
+
         return ['user' => $user, 'token' => $token];
     }
 
     public function registerMod(array $data): array
     {
-        $user = $this->userRepo->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'role' => 'MODERATOR',
-        ]);
+        $user = $this->userRepo->create($data, 'MODERATOR');
 
         $token = $user->createToken('UserToken')->plainTextToken;
+
         return ['user' => $user, 'token' => $token];
     }
 
@@ -55,6 +47,7 @@ class AuthService
         }
 
         $token = $user->createToken('UserToken')->plainTextToken;
+
         return ['user' => $user, 'token' => $token];
     }
 }

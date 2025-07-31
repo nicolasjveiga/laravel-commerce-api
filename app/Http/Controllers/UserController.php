@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -18,29 +19,50 @@ class UserController extends Controller
     
     public function index()
     {
-        return User::all();
-    }
+        $this->authorize('viewAny', User::class);
 
-    public function store(RegisterRequest $request)
-    {
-        $user = User::create($request->validated());
-        return response()->json($user, 201);
+        $users = $this->userService->listAll();
+
+        return response()->json($users, 200);
     }
 
     public function show(User $user)
     {
-        return $user;
+        $this->authorize('view', $user);
+
+        $user = $this->userService->show($user);
+        
+        return response()->json($user, 200);
     }
 
-    public function update(Request $request, User $user)
+    public function store(RegisterRequest $request)
     {
-        $user->update($request->all());
-        return $user;
+        $this->authorize('create', User::class);
+        
+        $validated = $request->validated();
+
+        $user = $this->userService->create($validated);
+        
+        return response()->json($user, 201);
+    }
+
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $this->authorize('update', $user);
+
+        $validated = $request->validated();
+
+        $user = $this->userService->update($user, $validated);
+        
+        return response()->json($user, 200);
     }
 
     public function destroy(User $user)
     {
-        $user->delete();
-        return response()->noContent();
+        $this->authorize('delete', $user);
+
+        $this->userService->delete($user);
+
+        return response()->json(null, 204);
     }
 }

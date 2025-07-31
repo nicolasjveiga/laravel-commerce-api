@@ -6,9 +6,25 @@ use App\Models\User;
 
 class UserRepository
 {
-    public function create(array $data): User
+
+    public function all()
     {
-        return User::create($data);
+        return User::all();
+    }
+
+    public function find(User $user): User
+    {
+        return $user;
+    }
+
+    public function create(array $data, string $role): User
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role' => $role,
+        ]);
     }
 
     public function findByEmail(string $email): ?User

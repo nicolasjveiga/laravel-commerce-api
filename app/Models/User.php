@@ -16,15 +16,34 @@ class User extends Authenticatable
 
     protected $fillable = ['name', 'email', 'password', 'role'];
 
-    public function addresses(){
+    public function addresses()
+    {
         return $this->hasMany(Address::class);
     }
 
-    public function cart(){
+    public function cart()
+    {
         return $this->hasOne(Cart::class);
     }
 
-    public function orders(){
+    public function orders()
+    {
         return $this->hasMany(Order::class);
     }
+
+    public function isAdmin()
+    {
+        return $this->role === 'ADMIN';
+    }
+
+    public function isMod()
+    {
+        return $this->role === 'MODERATOR';
+    }
+
+    public function isSelf(User $user)
+    {
+        return $this->id === $user->id;
+    }
+
 }

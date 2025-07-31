@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreCategoryRequest;
-use App\Services\CategoryService;
-use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -19,29 +19,50 @@ class CategoryController extends Controller
 
     public function index()
     {
-        return response()->json($this->categoryService->listAll());
+        $this->authorize('viewAny', Category::class);
+
+        $categories = $this->categoryService->listAll(); 
+        
+        return response()->json($categories, 200);
     }
 
     public function show(Category $category)
     {
-        return response()->json($this->categoryService->show($category));
+        $this->authorize('view', $category);
+        
+        $category = $this->categoryService->show($category);
+        
+        return response()->json($category, 200);
     }
 
     public function store(StoreCategoryRequest $request)
     {
-        $category = $this->categoryService->create($request->validated());
+        $this->authorize('create', Category::class);
+        
+        $validated = $request->validated();
+
+        $category = $this->categoryService->create($validated);
+        
         return response()->json($category, 201);
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $category = $this->categoryService->update($category, $request->validated());
-        return response()->json($category);
+        $this->authorize('update', $category);
+
+        $validated = $request->validated();
+
+        $category = $this->categoryService->update($category, $validated);
+        
+        return response()->json($category, 200);
     }
 
     public function destroy(Category $category)
     {
+        $this->authorize('delete', $category);
+
         $this->categoryService->delete($category);
+        
         return response()->json(null, 204);
     }
 }

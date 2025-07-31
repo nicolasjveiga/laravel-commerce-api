@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Discount;
 use Illuminate\Http\Request;
 use App\Services\DiscountService;
-use App\Models\Discount;
 use App\Http\Requests\StoreDiscountRequest;
 use App\Http\Requests\UpdateDiscountRequest;
 
@@ -19,23 +19,50 @@ class DiscountController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', Discount::class);
+
         $discounts = $this->discountService->listAll();
-        return response()->json($discounts);
+        
+        return response()->json($discounts, 200);
+    }
+
+    public function show(Discount $discount)
+    {
+        $this->authorize('view', $discount);
+        
+        $discount = $this->discountService->show($discount);
+        
+        return response()->json($discount, 200);
     }
 
     public function store(StoreDiscountRequest $request)
     {
-        return response()->json($this->discountService->create($request->validated()), 201);
+        $this->authorize('create', Discount::class);
+        
+        $validated = $request->validated();
+
+        $discount = $this->discountService->create($validated);
+        
+        return response()->json($discount, 201);
     }
 
     public function update(UpdateDiscountRequest $request, Discount $discount)
     {
-        return response()->json($this->discountService->update($discount, $request->validated()));
+        $this->authorize('update', $discount);
+        
+        $validated = $request->validated();
+
+        $discount = $this->discountService->update($discount, $validated);
+        
+        return response()->json($discount, 200);
     }
 
     public function destroy(Discount $discount)
     {
+        $this->authorize('delete', $discount);
+        
         $this->discountService->delete($discount);
+        
         return response()->json(null, 204);
     }
 

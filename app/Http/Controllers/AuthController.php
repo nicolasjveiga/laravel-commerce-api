@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Services\AuthService;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Services\AuthService;
 
 class AuthController extends Controller
 {
@@ -17,19 +18,28 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $result = $this->authService->register($request->validated());
+        $validated = $request->validated();
+
+        $result = $this->authService->register($validated);
+        
         return response()->json($result, 201);
     }
 
     public function registerMod(RegisterRequest $request)
     {
-        $result = $this->authService->registerMod($request->validated());
+        $validated = $request->validated();
+        
+        $result = $this->authService->registerMod($validated);
+        
         return response()->json($result, 201);
     }
 
     public function login(LoginRequest $request)
     {
-        $result = $this->authService->login($request->validated());
-        return response()->json($result);
+        $validated = $request->validated();
+        
+        $result = $this->authService->login($validated);
+        
+        return response()->json($result, 200);
     }
 }

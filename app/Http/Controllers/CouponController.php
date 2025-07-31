@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCouponRequest;
-use App\Http\Requests\UpdateCouponRequest;
 use App\Models\Coupon;
 use App\Services\CouponService;
+use App\Http\Requests\StoreCouponRequest;
+use App\Http\Requests\UpdateCouponRequest;
 
 class CouponController extends Controller
 {
@@ -18,22 +18,50 @@ class CouponController extends Controller
 
     public function index()
     {
-        return response()->json($this->couponService->listAll());
+        $this->authorize('viewAny', Coupon::class);
+        
+        $coupon = $this->couponService->listAll();
+        
+        return response()->json($coupon, 200);
+    }
+
+    public function show(Coupon $coupon)
+    {
+        $this->authorize('view', $coupon);
+        
+        $coupon = $this->couponService->show($coupon);
+        
+        return response()->json($coupon, 200);
     }
 
     public function store(StoreCouponRequest $request)
     {
-        return response()->json($this->couponService->create($request->validated()), 201);
+        $this->authorize('create', Coupon::class);
+        
+        $validated = $request->validated();
+
+        $coupon = $this->couponService->create($validated);
+        
+        return response()->json($coupon, 201);
     }
 
     public function update(UpdateCouponRequest $request, Coupon $coupon)
     {
-        return response()->json($this->couponService->update($coupon, $request->validated()));
+        $this->authorize('update', $coupon);
+
+        $validated = $request->validated();
+
+        $coupon = $this->couponService->update($coupon, $validated);
+        
+        return response()->json($coupon, 200);
     }
 
     public function destroy(Coupon $coupon)
     {
+        $this->authorize('delete', $coupon);
+
         $this->couponService->delete($coupon);
+        
         return response()->json(null, 204);
     }
 

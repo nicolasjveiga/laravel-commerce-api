@@ -34,9 +34,8 @@ class CategoryService
         return $this->categoryRepo->update($category, $data);
     }
 
-    public function delete(Category $category): Category
+    public function delete(Category $category): void
     {
         $this->categoryRepo->delete($category);
-        return $category;
     }
 }
