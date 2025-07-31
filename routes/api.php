@@ -23,8 +23,6 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 Route::middleware(['auth:sanctum', 'role:ADMIN'])->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod'])->name('register.mod');
 
-    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
-
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
@@ -59,7 +57,7 @@ Route::middleware(['auth:sanctum', 'role:MODERATOR'])->group(function (){
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
-    Route::get('/my-addresses', [AddressController::class, 'myAddresses'])->name('addresses.my');
+    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
     Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
     Route::get('/addresses/{address}', [AddressController::class, 'show'])->name('addresses.show');
     Route::put('/addresses/{address}', [AddressController::class, 'update'])->name('addresses.update');

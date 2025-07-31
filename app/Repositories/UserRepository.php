@@ -17,9 +17,14 @@ class UserRepository
         return $user;
     }
 
-    public function create(array $data): User
+    public function create(array $data, string $role): User
     {
-        return User::create($data);
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role' => $role,
+        ]);
     }
 
     public function findByEmail(string $email): ?User

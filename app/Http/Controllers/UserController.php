@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\User;
 
 class UserController extends Controller
 {
@@ -21,14 +21,18 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        return response()->json($this->userService->listAll());
+        $users = $this->userService->listAll();
+
+        return response()->json($users, 200);
     }
 
     public function show(User $user)
     {
         $this->authorize('view', $user);
+
+        $user = $this->userService->show($user);
         
-        return response()->json($this->userService->show($user));
+        return response()->json($user, 200);
     }
 
     public function store(RegisterRequest $request)
@@ -50,7 +54,7 @@ class UserController extends Controller
 
         $user = $this->userService->update($user, $validated);
         
-        return response()->json($user);
+        return response()->json($user, 200);
     }
 
     public function destroy(User $user)

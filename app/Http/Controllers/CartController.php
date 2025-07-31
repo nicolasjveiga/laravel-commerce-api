@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CartService;
 use App\Models\Cart;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
+use App\Services\CartService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AddCartItemRequest;
 use App\Http\Requests\UpdateCartRequest;
+use App\Http\Requests\AddCartItemRequest;
 
 class CartController extends Controller
 {
@@ -27,7 +27,7 @@ class CartController extends Controller
 
         $items = $this->cartService->getCartItems();
         
-        return response()->json($items);
+        return response()->json($items, 200);
     }
 
     public function store(AddCartItemRequest $request)
@@ -53,12 +53,14 @@ class CartController extends Controller
 
         $item = $this->cartService->updateItem($cartItem, $validated['quantity']);
         
-        return response()->json($item);
+        return response()->json($item, 200);
     }
 
     public function destroy(CartItem $cartItem)
     {
-        $this->authorize('delete', $cartItem);
+        $cart = $this->cartService->getOrCreateUserCart();
+
+        $this->authorize('destroy', $cart);
 
         $this->cartService->removeItem($cartItem);
         
@@ -67,7 +69,9 @@ class CartController extends Controller
 
     public function clear()
     {
-        $this->authorize('clear', CartItem::class);
+        $cart = $this->cartService->getOrCreateUserCart();
+
+        $this->authorize('clear', $cart);
 
         $this->cartService->clearCart();
         

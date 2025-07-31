@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use Illuminate\Http\Request;
+use App\Services\AddressService;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
-use App\Models\Address;
-use App\Services\AddressService;
-use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
@@ -17,27 +17,24 @@ class AddressController extends Controller
         $this->addressService = $addressService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Address::class);
 
-        return response()->json($this->addressService->listAll());
-    }
-
-    public function myAddresses(Request $request)
-    {
         $user = $request->user();
-        
-        $addresses = $this->addressService->listByUser($user);
-        
-        return response()->json($addresses);
+
+        $addresses = $this->addressService->listAll($user);
+
+        return response()->json($addresses, 200);
     }
 
     public function show(Address $address)
     {
         $this->authorize('view', $address);
         
-        return response()->json($this->addressService->show($address));
+        $address = $this->addressService->show($address);
+
+        return response()->json($address, 200);
     }
 
     public function store(StoreAddressRequest $request)
@@ -59,7 +56,7 @@ class AddressController extends Controller
 
         $address = $this->addressService->update($address, $validated);
         
-        return response()->json($address);
+        return response()->json($address, 200);
     }
 
     public function destroy(Address $address)

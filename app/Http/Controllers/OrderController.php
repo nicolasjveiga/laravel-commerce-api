@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Services\OrderService;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateStatusRequest;
-use App\Services\OrderService;
-use App\Models\Order;
-
 
 class OrderController extends Controller
 {
@@ -24,7 +23,7 @@ class OrderController extends Controller
 
         $orders = $this->orderService->getAllOrders();
         
-        return response()->json($orders);
+        return response()->json($orders, 200);
     }
 
     public function store(StoreOrderRequest $request)
@@ -46,7 +45,7 @@ class OrderController extends Controller
         
         $order = $this->orderService->updateOrderStatus($order, $validated['status']);
         
-        return response()->json($order);
+        return response()->json($order, 200);
     }
 
     public function cancel(Order $order)

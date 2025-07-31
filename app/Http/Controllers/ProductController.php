@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 
 class ProductController extends Controller
@@ -54,7 +54,7 @@ class ProductController extends Controller
 
         $product = $this->productService->update($product, $validated);
         
-        return response()->json($product);
+        return response()->json($product, 200);
     }
 
     public function destroy(Product $product)

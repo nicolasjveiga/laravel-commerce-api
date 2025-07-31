@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Address;
+use App\Models\User;
 use App\Repositories\AddressRepository;
 
 class AddressService
@@ -14,12 +15,12 @@ class AddressService
         $this->addressRepo = $addressRepo;
     }
 
-    public function listAll()
+    public function listAll(User $user)
     {
-        return $this->addressRepo->all();
-    }
+        if($user->isAdmin()){
+            return $this->addressRepo->all();
+        }
 
-    public function listByUser($user){
         return $this->addressRepo->listByUser($user);
     }
 
@@ -38,9 +39,8 @@ class AddressService
         return $this->addressRepo->update($address, $data);
     }
 
-    public function delete(Address $address): Address
+    public function delete(Address $address): void
     {
         $this->addressRepo->delete($address);
-        return $address;
     }
 }

@@ -34,9 +34,8 @@ class DiscountService
         return $this->discountRepo->update($discount, $data);
     }
 
-    public function delete(Discount $discount):Discount
+    public function delete(Discount $discount): void
     {
         $this->discountRepo->delete($discount);
-        return $discount;
     }
 }
