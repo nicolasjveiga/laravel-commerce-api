@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use Illuminate\Http\Request;
 use App\Services\CartService;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartItemResource;
 use App\Http\Requests\UpdateCartRequest;
 use App\Http\Requests\AddCartItemRequest;
 
@@ -27,7 +28,7 @@ class CartController extends Controller
 
         $items = $this->cartService->getCartItems();
         
-        return response()->json($items, 200);
+        return CartItemResource::collection($items);
     }
 
     public function store(AddCartItemRequest $request)
@@ -40,7 +41,7 @@ class CartController extends Controller
 
         $item = $this->cartService->addItem($validated);
 
-        return response()->json($item, 201);
+        return new CartItemResource($item);
     }
 
     public function update(UpdateCartRequest $request, CartItem $cartItem)
@@ -53,7 +54,7 @@ class CartController extends Controller
 
         $item = $this->cartService->updateItem($cartItem, $validated['quantity']);
         
-        return response()->json($item, 200);
+        return new CartItemResource($item);
     }
 
     public function destroy(CartItem $cartItem)
@@ -64,7 +65,7 @@ class CartController extends Controller
 
         $this->cartService->removeItem($cartItem);
         
-        return response()->json(null, 204);
+        return new CartItemResource($cartItem);
     }
 
     public function clear()
