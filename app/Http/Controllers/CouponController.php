@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Coupon;
 use App\Services\CouponService;
+use App\Http\Resources\CouponResource;
 use App\Http\Requests\StoreCouponRequest;
 use App\Http\Requests\UpdateCouponRequest;
 
@@ -22,7 +23,7 @@ class CouponController extends Controller
         
         $coupon = $this->couponService->listAll();
         
-        return response()->json($coupon, 200);
+        return CouponResource::collection($coupon);
     }
 
     public function show(Coupon $coupon)
@@ -31,7 +32,7 @@ class CouponController extends Controller
         
         $coupon = $this->couponService->show($coupon);
         
-        return response()->json($coupon, 200);
+        return new CouponResource($coupon);
     }
 
     public function store(StoreCouponRequest $request)
@@ -42,7 +43,7 @@ class CouponController extends Controller
 
         $coupon = $this->couponService->create($validated);
         
-        return response()->json($coupon, 201);
+        return new CouponResource($coupon);
     }
 
     public function update(UpdateCouponRequest $request, Coupon $coupon)
@@ -53,7 +54,7 @@ class CouponController extends Controller
 
         $coupon = $this->couponService->update($coupon, $validated);
         
-        return response()->json($coupon, 200);
+        return new CouponResource($coupon);
     }
 
     public function destroy(Coupon $coupon)

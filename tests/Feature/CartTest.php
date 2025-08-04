@@ -47,7 +47,7 @@ class CartTest extends TestCase
         ]);
 
         $response->assertOk()
-                 ->assertJsonIsArray();
+                 ->assertJsonIsArray('data');
     }
 
     public function test_user_can_update_cart_item()

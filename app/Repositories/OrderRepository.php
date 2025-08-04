@@ -74,8 +74,6 @@ class OrderRepository
 
     public function getAllOrders()
     {
-        return Order::with(['items' => function ($query) {
-            $query->select('id', 'order_id', 'product_id', 'quantity', 'unitPrice');
-        }])->get();
+        return Order::with('items.product')->get();
     }
 }

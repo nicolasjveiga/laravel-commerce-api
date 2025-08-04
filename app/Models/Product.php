@@ -10,7 +10,6 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = ['category_id', 'name', 'stock', 'price', 'image'];
-    protected $appends = ['image_url'];
 
     public function category(){
         return $this->belongsTo(Category::class);
@@ -28,11 +27,4 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function getImageUrlAttribute(){
-        if(!$this->image){
-            return null;
-        }
-
-        return asset('storage/' . $this->image);
-    }
 }

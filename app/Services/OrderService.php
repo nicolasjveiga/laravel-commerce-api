@@ -116,15 +116,6 @@ class OrderService
 
     public function getAllOrders()
     {
-        return $this->orderRepo->getAllOrders()->map(function ($order) {
-            $order->items = $order->items->map(function ($item) {
-                return [
-                    'product_id' => $item->product_id,
-                    'quantity'   => $item->quantity,
-                    'unitPrice'  => $item->unitPrice,
-                ];
-            });
-            return $order;
-        });
+        return $this->orderRepo->getAllOrders();
     }
 }

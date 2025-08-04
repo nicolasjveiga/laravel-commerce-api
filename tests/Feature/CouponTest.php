@@ -48,7 +48,7 @@ class CouponTest extends TestCase
         ]);
 
         $response->assertOk()
-                 ->assertJsonCount(2);
+                 ->assertJsonCount(2, 'data');
     }
 
     public function test_admin_can_update_coupon()

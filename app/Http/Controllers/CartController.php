@@ -65,7 +65,7 @@ class CartController extends Controller
 
         $this->cartService->removeItem($cartItem);
         
-        return new CartItemResource($cartItem);
+        return response()->json(null, 204);
     }
 
     public function clear()

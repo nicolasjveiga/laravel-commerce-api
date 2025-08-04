@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Discount;
 use Illuminate\Http\Request;
 use App\Services\DiscountService;
+use App\Http\Resources\DiscountResource;
 use App\Http\Requests\StoreDiscountRequest;
 use App\Http\Requests\UpdateDiscountRequest;
 
@@ -23,7 +24,7 @@ class DiscountController extends Controller
 
         $discounts = $this->discountService->listAll();
         
-        return response()->json($discounts, 200);
+        return DiscountResource::collection($discounts);
     }
 
     public function show(Discount $discount)
@@ -32,7 +33,7 @@ class DiscountController extends Controller
         
         $discount = $this->discountService->show($discount);
         
-        return response()->json($discount, 200);
+        return new DiscountResource($discount);
     }
 
     public function store(StoreDiscountRequest $request)
@@ -43,7 +44,7 @@ class DiscountController extends Controller
 
         $discount = $this->discountService->create($validated);
         
-        return response()->json($discount, 201);
+        return new DiscountResource($discount);
     }
 
     public function update(UpdateDiscountRequest $request, Discount $discount)
@@ -54,7 +55,7 @@ class DiscountController extends Controller
 
         $discount = $this->discountService->update($discount, $validated);
         
-        return response()->json($discount, 200);
+        return new DiscountResource($discount);
     }
 
     public function destroy(Discount $discount)

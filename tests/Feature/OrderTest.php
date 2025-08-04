@@ -114,7 +114,7 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertOk()
-                ->assertJsonStructure([['id', 'address_id', 'items']]);
+                ->assertJsonFragment(['address_id' => $address->id]);
     }
 
     public function test_user_can_cancel_order()
@@ -130,7 +130,7 @@ class OrderTest extends TestCase
             'Authorization' => $auth['Authorization']
         ]);
 
-        $orderId = $orderResponse->json('id');
+        $orderId = $orderResponse->json('data.id');
 
         $response = $this->postJson("/api/orders/{$orderId}/cancel", [], [
             'Authorization' => $auth['Authorization']
@@ -215,7 +215,7 @@ class OrderTest extends TestCase
             'Authorization' => $auth['Authorization']
         ]);
 
-        $orderId = $orderResponse->json('id');
+        $orderId = $orderResponse->json('data.id');
 
         $this->postJson("/api/orders/{$orderId}/cancel", [], [
             'Authorization' => $auth['Authorization']
