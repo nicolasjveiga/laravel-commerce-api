@@ -231,6 +231,10 @@ class OrderTest extends TestCase
     // {
     //     $auth1 = $this->authenticate();
     //     $user1 = $auth1['user'];
+
+    //     $auth2 = $this->authenticate();
+    //     $user2 = $auth2['user'];
+
     //     $address = Address::factory()->create(['user_id' => $user1->id]);
     //     $this->setupCart($user1);
 
@@ -240,9 +244,8 @@ class OrderTest extends TestCase
     //         'Authorization' => $auth1['Authorization']
     //     ]);
 
-    //     $orderId = $orderResponse->json('id');
+    //     $orderId = $orderResponse->json('data.id');
 
-    //     $auth2 = $this->authenticate();
 
     //     $response = $this->postJson("/api/orders/{$orderId}/cancel", [], [
     //         'Authorization' => $auth2['Authorization']
