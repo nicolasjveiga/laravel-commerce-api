@@ -27,7 +27,7 @@ class UserAuthorizationTest extends TestCase
         return ['Authorization' => "Bearer $token", 'user' => $user];
     }
 
-    public function user_cannot_list_users()
+    public function test_user_cannot_list_users()
     {
         $auth = $this->authenticate();
 
@@ -40,7 +40,7 @@ class UserAuthorizationTest extends TestCase
         $response->assertStatus(403);
     }
  
-    public function user_cannot_show_user()
+    public function test_user_cannot_show_user()
     {
         $auth = $this->authenticate();
         $user = User::factory()->create();
@@ -52,7 +52,7 @@ class UserAuthorizationTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function user_cannot_create_user() //pode mas só na rota de Register
+    public function test_user_cannot_create_user() //pode mas só na rota de Register
     {
         $auth = $this->authenticate();
 
@@ -67,7 +67,7 @@ class UserAuthorizationTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function user_cannot_update_user()
+    public function test_user_cannot_update_user()
     {
         $auth = $this->authenticate();
         $user = User::factory()->create();
@@ -81,7 +81,7 @@ class UserAuthorizationTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function user_cannot_delete_user()
+    public function test_user_cannot_delete_user()
     {
         $auth = $this->authenticate();
         $user = User::factory()->create();
