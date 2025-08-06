@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Discount;
 use App\Models\Product;
+use App\Models\Discount;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DiscountAuthorizationTest extends TestCase
 {
@@ -24,7 +24,7 @@ class DiscountAuthorizationTest extends TestCase
 
     protected function authenticateMod()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'MODERATOR']);
         $token = $user->createToken('UserToken')->plainTextToken;
 
         return ['Authorization' => "Bearer $token", 'user' => $user];

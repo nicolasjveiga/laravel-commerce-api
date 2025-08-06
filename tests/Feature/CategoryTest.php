@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
 use App\Models\User;
 use App\Models\Category;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategoryTest extends TestCase

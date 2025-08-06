@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\Coupon;
-use App\Models\User;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Coupon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CouponAuthorizationTest extends TestCase

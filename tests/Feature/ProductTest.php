@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
+use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\User;
 
 class ProductTest extends TestCase
 {
