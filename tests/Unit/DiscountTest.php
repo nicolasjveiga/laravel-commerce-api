@@ -10,10 +10,12 @@ use App\Models\Discount;
 use App\Models\CartItem;
 use App\Services\OrderService;
 use PHPUnit\Framework\TestCase;
+use App\Services\PricingService;
 use App\Repositories\OrderRepository;
 
 class DiscountTest extends TestCase
 {
+
     public function test_discount_calculation_is_correct()
     {
         $product = new Product(['price' => 100]);
@@ -32,11 +34,21 @@ class DiscountTest extends TestCase
         $cart->setRelation('items', collect([$cartItem]));
 
         $mockRepo = Mockery::mock(OrderRepository::class);
-        $mockRepo->shouldReceive('getValidCoupon')->andReturn(null);
 
-        $orderService = new OrderService($mockRepo);
+        $mockPricing = Mockery::mock(PricingService::class);
+        $mockPricing->shouldReceive('applyProductDiscount')
+            ->once()
+            ->with($product)
+            ->andReturn(80);
 
-        $ref = new ReflectionClass($orderService);
+        $mockPricing->shouldReceive('applyCoupon')
+            ->once()
+            ->with(160, null)
+            ->andReturn(160);
+
+        $orderService = new OrderService($mockRepo, $mockPricing);
+
+        $ref = new \ReflectionClass($orderService);
         $method = $ref->getMethod('calculateTotal');
         $method->setAccessible(true);
 
@@ -44,4 +56,5 @@ class DiscountTest extends TestCase
 
         $this->assertEquals(160, $total);
     }
+
 }

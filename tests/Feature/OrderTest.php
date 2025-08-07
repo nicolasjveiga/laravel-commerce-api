@@ -180,7 +180,7 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertStatus(400)
-                ->assertJsonFragment(['message' => "Product {$product->name} does not have enough stock"]);
+                ->assertJsonFragment(['message' => "Product '{$product->name}' does not have enough stock"]);
     }
 
     public function test_stock_decreases_after_order_creation()
