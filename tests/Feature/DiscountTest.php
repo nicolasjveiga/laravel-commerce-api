@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Discount;
-use App\Models\Product;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Product;
+use App\Models\Discount;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DiscountTest extends TestCase
@@ -50,7 +50,7 @@ class DiscountTest extends TestCase
         ]);
 
         $response->assertOk()
-                 ->assertJsonCount(2);
+                 ->assertJsonCount(2, 'data');
     }
 
     public function test_admin_can_update_discount()

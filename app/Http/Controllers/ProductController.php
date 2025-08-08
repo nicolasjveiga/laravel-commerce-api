@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Services\ProductService;
+use App\Http\Resources\ProductResource;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 
@@ -23,7 +24,7 @@ class ProductController extends Controller
 
         $products = $this->productService->listAll();
         
-        return response()->json($products, 200);
+        return ProductResource::collection($products);
     }
 
     public function show(Product $product)
@@ -32,7 +33,7 @@ class ProductController extends Controller
         
         $product = $this->productService->show($product);
         
-        return response()->json($product, 200);
+        return new ProductResource($product);
     }
 
     public function store(StoreProductRequest $request)
@@ -43,7 +44,7 @@ class ProductController extends Controller
 
         $product = $this->productService->create($validated);
         
-        return response()->json($product, 201);
+        return new ProductResource($product);
     }
 
     public function update(UpdateProductRequest $request, Product $product)
@@ -54,7 +55,7 @@ class ProductController extends Controller
 
         $product = $this->productService->update($product, $validated);
         
-        return response()->json($product, 200);
+        return new ProductResource($product);
     }
 
     public function destroy(Product $product)

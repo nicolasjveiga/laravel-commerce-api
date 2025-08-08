@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
 use App\Models\User;
 use App\Models\Category;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategoryTest extends TestCase
@@ -47,7 +47,7 @@ class CategoryTest extends TestCase
         ]);
 
         $response->assertOk()
-                    ->assertJsonCount(2);
+                    ->assertJsonCount(2, 'data');
     }
 
     public function test_user_can_update_category()

@@ -8,12 +8,12 @@ class ProductRepository
 {
     public function all()
     {
-        return Product::with('category')->get();
+        return Product::all();
     }
 
     public function find(Product $product)
     {
-        return $product->load('category');
+        return $product;
     }
 
     public function create(array $data): Product

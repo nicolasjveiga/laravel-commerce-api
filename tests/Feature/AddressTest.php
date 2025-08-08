@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\Address;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Address;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AddressTest extends TestCase
 {
@@ -50,7 +50,7 @@ class AddressTest extends TestCase
         ]);
 
         $response->assertOk()
-                    ->assertJsonCount(2);
+                    ->assertJsonCount(2, 'data');
     }
 
     public function test_user_can_update_address()

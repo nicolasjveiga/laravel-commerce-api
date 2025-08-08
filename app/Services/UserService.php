@@ -26,7 +26,7 @@ class UserService
 
     public function create(array $data): User
     {
-        return $this->userRepo->create($data);
+        return $this->userRepo->create($data, 'CLIENT');
     }
 
     public function update(User $user, array $data): User

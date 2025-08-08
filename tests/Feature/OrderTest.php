@@ -2,15 +2,15 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
 use App\Models\User;
-use App\Models\Product;
-use App\Models\Address;
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Coupon;
+use App\Models\Product;
+use App\Models\Address;
+use App\Models\CartItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class OrderTest extends TestCase
 {
@@ -114,7 +114,7 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertOk()
-                ->assertJsonStructure([['id', 'address_id', 'items']]);
+                ->assertJsonFragment(['address_id' => $address->id]);
     }
 
     public function test_user_can_cancel_order()
@@ -130,7 +130,7 @@ class OrderTest extends TestCase
             'Authorization' => $auth['Authorization']
         ]);
 
-        $orderId = $orderResponse->json('id');
+        $orderId = $orderResponse->json('data.id');
 
         $response = $this->postJson("/api/orders/{$orderId}/cancel", [], [
             'Authorization' => $auth['Authorization']
@@ -180,7 +180,7 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertStatus(400)
-                ->assertJsonFragment(['message' => "Product {$product->name} does not have enough stock"]);
+                ->assertJsonFragment(['message' => "Product '{$product->name}' does not have enough stock"]);
     }
 
     public function test_stock_decreases_after_order_creation()
@@ -215,7 +215,7 @@ class OrderTest extends TestCase
             'Authorization' => $auth['Authorization']
         ]);
 
-        $orderId = $orderResponse->json('id');
+        $orderId = $orderResponse->json('data.id');
 
         $this->postJson("/api/orders/{$orderId}/cancel", [], [
             'Authorization' => $auth['Authorization']
@@ -231,6 +231,10 @@ class OrderTest extends TestCase
     // {
     //     $auth1 = $this->authenticate();
     //     $user1 = $auth1['user'];
+
+    //     $auth2 = $this->authenticate();
+    //     $user2 = $auth2['user'];
+
     //     $address = Address::factory()->create(['user_id' => $user1->id]);
     //     $this->setupCart($user1);
 
@@ -240,9 +244,8 @@ class OrderTest extends TestCase
     //         'Authorization' => $auth1['Authorization']
     //     ]);
 
-    //     $orderId = $orderResponse->json('id');
+    //     $orderId = $orderResponse->json('data.id');
 
-    //     $auth2 = $this->authenticate();
 
     //     $response = $this->postJson("/api/orders/{$orderId}/cancel", [], [
     //         'Authorization' => $auth2['Authorization']

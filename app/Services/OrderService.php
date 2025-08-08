@@ -2,21 +2,28 @@
 
 namespace App\Services;
 
+use PrincingService;
+use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Coupon;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Cart;
-use Illuminate\Support\Facades\DB;
-use App\Repositories\OrderRepository;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\OrderRepository;
+use App\Exceptions\Order\CartEmptyException;
+use App\Exceptions\Order\InsufficientStockException;
+use App\Exceptions\Order\OrderCancellationException;
+use App\Exceptions\Order\UnauthorizedOrderActionException;
 
 class OrderService
 {
     protected $orderRepo;
+    protected $pricingService;
 
-    public function __construct(OrderRepository $orderRepo)
+    public function __construct(OrderRepository $orderRepo, PricingService $pricingService)
     {
         $this->orderRepo = $orderRepo;
+        $this->pricingService = $pricingService;
     }
 
     public function createOrder(array $data)
@@ -32,7 +39,7 @@ class OrderService
             $order = $this->orderRepo->createOrder([
                 'user_id'     => $user->id,
                 'address_id'  => $data['address_id'],
-                'coupon_id'   => $this->coupon?->id,
+                'coupon_id'   => $this->pricingService->getAplliedCoupon()?->id,
                 'orderDate'   => now(),
                 'status'      => 'PENDING',
                 'totalAmount' => $total,
@@ -51,12 +58,12 @@ class OrderService
     private function validateCart($cart): void
     {
         if ($cart->items->isEmpty()) {
-            abort(400, 'Cart is empty');
+            throw new CartEmptyException();
         }
 
         foreach ($cart->items as $item) {
             if ($item->product->stock < $item->quantity) {
-                abort(400, "Product {$item->product->name} does not have enough stock");
+                throw new InsufficientStockException($item->product);
             }
         }
     }
@@ -66,37 +73,21 @@ class OrderService
         $total = 0;
 
         foreach ($cart->items as $item) {
-            $price = $item->product->price;
-            $discount = $item->product->discounts
-                ->where('startDate', '<=', now())
-                ->where('endDate', '>=', now())
-                ->sortByDesc('discountPercentage')
-                ->first();
-
-            if ($discount) {
-                $price *= (1 - floatval($discount->discountPercentage) / 100);
-            }
-
+            $price = $this->pricingService->applyProductDiscount($item->product);
             $total += $price * $item->quantity;
         }
 
-        $this->coupon = $this->orderRepo->getValidCoupon($couponId);
-
-        if ($this->coupon) {
-            $total *= (1 - floatval($this->coupon->discountPercentage) / 100);
-        }
+        $total = $this->pricingService->applyCoupon($total, $couponId); 
 
         return $total;
     }
 
-    public function cancelOrder(Order $order)
+    public function cancelOrder(Order $order, string $originalStatus = null)
     {
-        if (Auth::id() !== $order->user_id) {
-            abort(403, 'Unauthorized action.');
-        }
+        $status = $originalStatus ?? $order->status;
 
-        if (in_array($order->status, ['CANCELED', 'COMPLETED'])) {
-            abort(400, 'Order cannot be cancelled');
+        if (in_array($status, ['CANCELED', 'COMPLETED'])) {
+            throw new OrderCancellationException();
         }
 
         $this->orderRepo->cancelOrder($order);
@@ -105,10 +96,12 @@ class OrderService
 
     public function updateOrderStatus(Order $order, string $status)
     {          
+        $originalStatus = $order->status;
+
         $updatedStatus = $this->orderRepo->updateOrderStatus($order, $status);
 
-        if ($updatedStatus->status === 'CANCELED') {
-            $this->orderRepo->restoreStockForOrder($updatedStatus);
+        if ($status === 'CANCELED') {
+            $this->cancelOrder($order, $originalStatus);
         }
 
         return $updatedStatus;    
@@ -116,15 +109,6 @@ class OrderService
 
     public function getAllOrders()
     {
-        return $this->orderRepo->getAllOrders()->map(function ($order) {
-            $order->items = $order->items->map(function ($item) {
-                return [
-                    'product_id' => $item->product_id,
-                    'quantity'   => $item->quantity,
-                    'unitPrice'  => $item->unitPrice,
-                ];
-            });
-            return $order;
-        });
+        return $this->orderRepo->getAllOrders();
     }
 }

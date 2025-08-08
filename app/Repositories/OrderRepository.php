@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Auth;
 class OrderRepository
 {
 
-    public function getValidCoupon(?int $couponId)
-    {
-        if (!$couponId) return null;
-
-        return Coupon::where('id', $couponId)
-            ->where('startDate', '<=', now())
-            ->where('endDate', '>=', now())
-            ->first();
-    }
-
     public function createOrder(array $data): Order
     {
         return Order::create($data);
@@ -74,8 +64,6 @@ class OrderRepository
 
     public function getAllOrders()
     {
-        return Order::with(['items' => function ($query) {
-            $query->select('id', 'order_id', 'product_id', 'quantity', 'unitPrice');
-        }])->get();
+        return Order::with('items.product')->get();
     }
 }

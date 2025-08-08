@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use App\Services\AddressService;
+use App\Http\Resources\AddressResource;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
 
@@ -25,7 +26,7 @@ class AddressController extends Controller
 
         $addresses = $this->addressService->listAll($user);
 
-        return response()->json($addresses, 200);
+        return AddressResource::collection($addresses);
     }
 
     public function show(Address $address)
@@ -34,7 +35,7 @@ class AddressController extends Controller
         
         $address = $this->addressService->show($address);
 
-        return response()->json($address, 200);
+        return new AddressResource($address);
     }
 
     public function store(StoreAddressRequest $request)
@@ -45,7 +46,7 @@ class AddressController extends Controller
 
         $address = $this->addressService->create($validated);
         
-        return response()->json($address, 201);
+        return new AddressResource($address);
     }
 
     public function update(UpdateAddressRequest $request, Address $address)
@@ -56,7 +57,7 @@ class AddressController extends Controller
 
         $address = $this->addressService->update($address, $validated);
         
-        return response()->json($address, 200);
+        return new AddressResource($address);
     }
 
     public function destroy(Address $address)
