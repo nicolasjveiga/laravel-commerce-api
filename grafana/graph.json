@@ -161,7 +161,7 @@
     {
       "datasource": {
         "type": "mysql",
-        "uid": "fesp03fvcms5ca"
+        "uid": "feu6kv3tui8zkf"
       },
       "fieldConfig": {
         "defaults": {
@@ -183,8 +183,8 @@
                 "color": "green"
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "dark-blue",
+                "value": 5
               }
             ]
           }
@@ -218,10 +218,10 @@
               "showLegend": true,
               "style": {
                 "color": {
-                  "field": "location",
+                  "field": "order_count",
                   "fixed": "dark-green"
                 },
-                "opacity": 0.5,
+                "opacity": 0.4,
                 "rotation": {
                   "fixed": 0,
                   "max": 360,
@@ -229,9 +229,10 @@
                   "mode": "mod"
                 },
                 "size": {
+                  "field": "order_count",
                   "fixed": 5,
-                  "max": 15,
-                  "min": 2
+                  "max": 10,
+                  "min": 5
                 },
                 "symbol": {
                   "fixed": "img/icons/marker/circle.svg",
@@ -254,12 +255,12 @@
                 }
               }
             },
-            "location": {
-              "latitude": "latitude",
-              "longitude": "longitude",
-              "mode": "coords"
+            "filterData": {
+              "id": "byRefId",
+              "options": "A"
             },
-            "name": "Layer 1",
+            "name": "Pedidos",
+            "opacity": 1,
             "tooltip": true,
             "type": "markers"
           }
@@ -282,7 +283,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  CONCAT(street, ', ', number, ' - ', city) AS location,\n  latitude,\n  longitude\nFROM addresses\nWHERE latitude IS NOT NULL AND longitude IS NOT NULL\n",
+          "rawSql": "SELECT\n  CONCAT(a.street, ' ', a.number, ' - ', a.city) AS location,\n  a.latitude,\n  a.longitude,\n  COUNT(o.id) AS order_count\nFROM addresses a\nJOIN orders o ON o.address_id = a.id\nWHERE a.latitude IS NOT NULL AND a.longitude IS NOT NULL\nGROUP BY a.id, a.street, a.number, a.city, a.latitude, a.longitude\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -303,13 +304,13 @@
           }
         }
       ],
-      "title": "New panel",
+      "title": "Pedidos realizados em cada endereço",
       "type": "geomap"
     },
     {
       "datasource": {
         "type": "mysql",
-        "uid": "fesp03fvcms5ca"
+        "uid": "feu6kv3tui8zkf"
       },
       "fieldConfig": {
         "defaults": {
@@ -492,7 +493,7 @@
     {
       "datasource": {
         "type": "mysql",
-        "uid": "fesp03fvcms5ca"
+        "uid": "feu6kv3tui8zkf"
       },
       "fieldConfig": {
         "defaults": {
@@ -625,7 +626,7 @@
     {
       "datasource": {
         "type": "mysql",
-        "uid": "fesp03fvcms5ca"
+        "uid": "feu6kv3tui8zkf"
       },
       "fieldConfig": {
         "defaults": {
@@ -763,7 +764,7 @@
     {
       "datasource": {
         "type": "mysql",
-        "uid": "fesp03fvcms5ca"
+        "uid": "feu6kv3tui8zkf"
       },
       "fieldConfig": {
         "defaults": {
@@ -847,12 +848,12 @@
     "list": []
   },
   "time": {
-    "from": "now-30d",
-    "to": "now"
+    "from": "2025-06-24T12:27:30.719Z",
+    "to": "2025-08-23T12:27:30.719Z"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "New dashboard",
+  "title": "Dashboard",
   "uid": "8b69194f-1ee4-4e68-81cd-cc8a4c56ac53",
-  "version": 17
+  "version": 19
 }
