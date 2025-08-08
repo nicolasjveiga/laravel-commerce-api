@@ -1,75 +1,75 @@
-# Projeto Laravel com Docker
+# 🛍 Laravel Commerce API + Docker + Grafana
 
-## Acesso ao phpMyAdmin
+## 🚀 Acesso Rápido
 
-Com o Docker rodando, é possível acessar o phpMyAdmin pelo link:
+| Serviço         | URL                          | Usuário / Senha     |
+|----------------|------------------------------|---------------------|
+| 🌐 phpMyAdmin     | `http://localhost:8075`       | `root` / `root`     |
+| 🧪 API Backend    | `http://localhost:8005/api`   | —                   |
+| 📊 Grafana        | `http://localhost:3000`       | `admin` / `admin`   |
 
-- [http://localhost:8075](http://localhost:8075)
-
-**Usuário:** `root`  
-**Senha:** `root`
-
-## Acesso ao Backend
-
-A URL base para acessar o backend é:
-
-- [http://localhost:8005/api](http://localhost:8005/api)
-
-## Instruções de Uso
-
-### Subir o Container
-
-Para iniciar o container, execute o comando:
+## 🐳 Como Rodar o Projeto (Docker)
 
 ```bash
 docker compose up -d
 ```
 
-### Configuração Inicial
+---
 
-1. **Criar o arquivo `.env`:**  
-   Copie o conteúdo do arquivo `.env.example` para um novo arquivo `.env` dentro da pasta raiz do projeto.
+## ⚙️ Configuração Inicial
 
-2. **Abrir o terminal dentro do Docker:**  
-   Execute o comando abaixo para acessar o terminal do container:
-   
+1. **Crie o arquivo `.env`:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Acesse o terminal dentro do container:**
    ```bash
    docker compose exec --user 1000:1000 app sh
    ```
-   
-3. **Instalar as dependências:**  
-   Dentro do terminal do Docker, digite o seguinte comando para instalar as dependências:
-   
+
+3. **Instale as dependências do Laravel:**
    ```bash
    composer update
    ```
 
-4. **Gerar a chave da aplicação:**  
-   Ainda dentro do terminal do Docker, execute:
-   
+4. **Gere a chave da aplicação:**
    ```bash
    php artisan key:generate
    ```
 
-5. **Rodar as migrações:**  
-   No mesmo terminal, execute:
-   
+5. **Execute as migrações:**
    ```bash
    php artisan migrate
    ```
+6. **Rode os seeders**
+   ```bash
+   php artisan db:seed
+   ```
 
-## Observações Importantes
+---
 
-- Sempre execute os comandos do Docker na mesma pasta onde está localizado o arquivo `docker-compose.yml` (pasta raiz).
-- Para executar comandos do Laravel é necessário acessar o terminal do container. Para isso, execute o comando:
-  
-  ```bash
-  docker compose exec --user 1000:1000 app sh
-  ```
+## 📊  Configurando o Grafana
 
-## Dicas para Usuários Windows
+### 1. Adicionar Data Source do MySQL
+- Acesse o Grafana em: `http://localhost:3000`
+- Faça login com `admin / admin` (caso ainda não tenha alterado)
+- Vá em: **Configuration → Data Sources → Add data source → MySQL**
+- Preencha os campos:
+  - **Host:** `db:3306`
+  - **Database:** `laravel`
+  - **Username:** `root`
+  - **Password:** `root`
+- Marque como **Default**
+- Clique em **Save & Test** — deve aparecer: *Database Connection OK*
 
-- Não use no Windows, php não gosta de Windows.
-- Se for utilizar, recomendo o uso do [Laragon](https://laragon.org/). Nos quatro primeiros vídeos desta [playlist](https://www.youtube.com/playlist?list=PLwXQLZ3FdTVH5Tb57_-ll_r0VhNz9RrXb) há um tutorial de como configurá-lo. Existem também outras opções, como o [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10), porém o WSL tem um certo delay.
+### 📥 2. Importar Dashboards
+- Navegue até: **Create → Import**
+- Selecione o arquivo: `grafana/graph.json`
+- Não precisa selecionar UID — ele usará o Data Source Default automaticamente
+- Clique em **Import** e os dashboards aparecerão configurados corretamente
+
+> 💡 **Dica caso algo dê errado:**  
+> Se o dashboard reclamar que não encontrou a fonte ou UID inválido, abra o JSON e remova qualquer `"uid": "xxxxx"` dentro da seção `datasource`. Reimporte depois. Pronto!
 
 ---
