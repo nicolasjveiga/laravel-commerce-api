@@ -23,8 +23,7 @@
   "panels": [
     {
       "datasource": {
-        "type": "mysql",
-        "uid": "fesp03fvcms5ca"
+        "type": "mysql"
       },
       "fieldConfig": {
         "defaults": {
