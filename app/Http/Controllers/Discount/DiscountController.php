@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Discount;
 
 use App\Models\Discount;
-use Illuminate\Http\Request;
 use App\Services\DiscountService;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\DiscountResource;
 use App\Http\Requests\StoreDiscountRequest;
 use App\Http\Requests\UpdateDiscountRequest;

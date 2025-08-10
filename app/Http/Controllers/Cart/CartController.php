@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Cart;
 
 use App\Models\Cart;
 use App\Models\CartItem;
-use Illuminate\Http\Request;
 use App\Services\CartService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CartItemResource;
