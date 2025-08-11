@@ -2,18 +2,14 @@
 
 namespace App\Services;
 
-use PrincingService;
 use App\Models\Cart;
 use App\Models\Order;
-use App\Models\Coupon;
-use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\OrderRepository;
 use App\Exceptions\Order\CartEmptyException;
 use App\Exceptions\Order\InsufficientStockException;
 use App\Exceptions\Order\OrderCancellationException;
-use App\Exceptions\Order\UnauthorizedOrderActionException;
 
 class OrderService
 {
@@ -53,7 +49,6 @@ class OrderService
         });
     }
 
-    private ?Coupon $coupon = null;
 
     private function validateCart($cart): void
     {
@@ -82,7 +77,7 @@ class OrderService
         return $total;
     }
 
-    public function cancelOrder(Order $order, string $originalStatus = null)
+    public function cancelOrder(Order $order, ?string $originalStatus = null)
     {
         $status = $originalStatus ?? $order->status;
 
@@ -95,7 +90,7 @@ class OrderService
     }
 
     public function updateOrderStatus(Order $order, string $status)
-    {          
+    {
         $originalStatus = $order->status;
 
         $updatedStatus = $this->orderRepo->updateOrderStatus($order, $status);
@@ -104,7 +99,7 @@ class OrderService
             $this->cancelOrder($order, $originalStatus);
         }
 
-        return $updatedStatus;    
+        return $updatedStatus;
     }
 
     public function getAllOrders()

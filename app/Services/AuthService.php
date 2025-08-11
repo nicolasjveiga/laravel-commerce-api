@@ -4,7 +4,6 @@ namespace App\Services;
 
 namespace App\Services;
 
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;

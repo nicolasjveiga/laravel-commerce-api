@@ -55,6 +55,6 @@ class OrderController extends Controller
 
         $this->orderService->cancelOrder($order);
         
-        return response()->json(null, 204);    
+        return response()->json(null, 204);
     }
 }

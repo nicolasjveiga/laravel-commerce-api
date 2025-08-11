@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Models\Coupon;
 use App\Models\Product;
-use App\Models\Discount;
-use Illuminate\Support\Facades\DB;
 use App\Exceptions\Order\InvalidCouponException;
 
 class PricingService
@@ -33,9 +31,9 @@ class PricingService
     {
         if (!$couponId){
             return $total;
-        }   
+        }
 
-        $coupon = Coupon::find($couponId);      
+        $coupon = Coupon::find($couponId);
 
         if(!$coupon || $coupon->startDate > now() || $coupon->endDate < now()) {
             throw new InvalidCouponException();
