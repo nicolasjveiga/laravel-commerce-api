@@ -5,8 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Models\User;
 use App\Services\UserService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 
 class UserController extends Controller
 {

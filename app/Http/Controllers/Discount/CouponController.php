@@ -6,8 +6,8 @@ use App\Models\Coupon;
 use App\Services\CouponService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CouponResource;
-use App\Http\Requests\StoreCouponRequest;
-use App\Http\Requests\UpdateCouponRequest;
+use App\Http\Requests\Coupon\StoreCouponRequest;
+use App\Http\Requests\Coupon\UpdateCouponRequest;
 
 class CouponController extends Controller
 {

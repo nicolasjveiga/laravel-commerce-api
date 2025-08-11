@@ -6,8 +6,8 @@ use App\Models\Order;
 use App\Services\OrderService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
-use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateStatusRequest;
+use App\Http\Requests\Order\StoreOrderRequest;
+use App\Http\Requests\Order\UpdateStatusRequest;
 
 class OrderController extends Controller
 {

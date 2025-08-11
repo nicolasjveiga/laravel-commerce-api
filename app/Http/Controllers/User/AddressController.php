@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Services\AddressService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AddressResource;
-use App\Http\Requests\StoreAddressRequest;
-use App\Http\Requests\UpdateAddressRequest;
+use App\Http\Requests\Address\StoreAddressRequest;
+use App\Http\Requests\Address\UpdateAddressRequest;
 
 class AddressController extends Controller
 {

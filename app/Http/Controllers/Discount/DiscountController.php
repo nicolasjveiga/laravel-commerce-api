@@ -6,8 +6,8 @@ use App\Models\Discount;
 use App\Services\DiscountService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DiscountResource;
-use App\Http\Requests\StoreDiscountRequest;
-use App\Http\Requests\UpdateDiscountRequest;
+use App\Http\Requests\Discount\StoreDiscountRequest;
+use App\Http\Requests\Discount\UpdateDiscountRequest;
 
 class DiscountController extends Controller
 {
