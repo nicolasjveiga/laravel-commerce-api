@@ -1,11 +1,10 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Cart;
 
-use App\Models\Order;
-use App\Models\User;
-use App\Models\Address;
-use App\Models\Coupon;
+use App\Models\Cart\Order;
+use App\Models\User\User;
+use App\Models\User\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory

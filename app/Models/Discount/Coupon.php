@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Discount;
 
+use App\Models\Cart\Order;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

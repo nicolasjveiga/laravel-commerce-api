@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Coupon;
+use App\Models\Discount\Coupon;
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CouponAuthorizationTest extends TestCase

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Product;
+use App\Models\Catalog\Product;
 use App\Repositories\ProductRepository;
 
 class ProductService

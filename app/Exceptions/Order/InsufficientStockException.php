@@ -3,7 +3,7 @@
 namespace App\Exceptions\Order;
 
 use Exception;
-use App\Models\Product;
+use App\Models\Catalog\Product;
 
 
 class InsufficientStockException extends Exception

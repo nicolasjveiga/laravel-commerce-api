@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
-use App\Models\Discount;
+use App\Models\User\User;
+use App\Models\Discount\Discount;
 
 class DiscountPolicy
 {

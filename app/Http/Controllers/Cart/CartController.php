@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Cart;
 
-use App\Models\Cart;
-use App\Models\CartItem;
+use App\Models\Cart\Cart;
+use App\Models\Cart\CartItem;
 use App\Services\CartService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Cart\CartItemResource;

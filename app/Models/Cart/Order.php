@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cart;
 
+use App\Models\User\User;
+use App\Models\Discount\Coupon;
+use App\Models\User\Address;
+use App\Models\Cart\OrderItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

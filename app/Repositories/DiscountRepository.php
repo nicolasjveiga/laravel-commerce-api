@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Discount;
+use App\Models\Discount\Discount;
 
 class DiscountRepository
 {

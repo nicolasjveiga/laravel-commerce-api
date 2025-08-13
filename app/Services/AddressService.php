@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Address;
-use App\Models\User;
+use App\Models\User\User;
+use App\Models\User\Address;
 use App\Repositories\AddressRepository;
 
 class AddressService

@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Address;
+use App\Models\User\Address;
 
 class AddressRepository
 {

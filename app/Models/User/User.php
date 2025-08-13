@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
+use App\Models\Cart\Cart;
+use App\Models\Cart\Order;
+use App\Models\User\Address;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use App\Models\Address;
-use App\Models\Cart;
-use App\Models\Order;
+
 
 class User extends Authenticatable
 {

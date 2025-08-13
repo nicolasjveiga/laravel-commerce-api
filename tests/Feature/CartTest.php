@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Product;
+use App\Models\User\User;
+use App\Models\Catalog\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CartTest extends TestCase

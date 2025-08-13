@@ -2,11 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Order;
-use App\Models\Coupon;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-
+use App\Models\Cart\Order;
 
 class OrderRepository
 {

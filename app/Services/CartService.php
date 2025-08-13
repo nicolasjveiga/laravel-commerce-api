@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\CartItem;
-use App\Models\Product;
-use App\Models\Cart;
+use App\Models\Cart\CartItem;
+use App\Models\Catalog\Product;
+use App\Models\Cart\Cart;
 use Illuminate\Support\Facades\Auth;
 
 class CartService

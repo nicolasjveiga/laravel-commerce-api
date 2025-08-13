@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Coupon;
+use App\Models\Discount\Coupon;
 use App\Repositories\CouponRepository;
 
 class CouponService

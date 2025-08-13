@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Discount;
+use App\Models\Discount\Discount;
 use App\Repositories\DiscountRepository;
 
 class DiscountService

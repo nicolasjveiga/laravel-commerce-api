@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Catalog;
 
+use App\Models\Cart\OrderItem;
+use App\Models\Cart\CartItem;
+use App\Models\Discount\Discount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

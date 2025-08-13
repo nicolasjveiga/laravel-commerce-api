@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Cart;
-use App\Models\Order;
+use App\Models\Cart\Cart;
+use App\Models\Cart\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\OrderRepository;

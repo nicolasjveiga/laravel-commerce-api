@@ -1,13 +1,14 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Discount;
 
-use App\Models\Coupon;
+use App\Models\Discount\Discount;
+use App\Models\Catalog\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CouponFactory extends Factory
+class DiscountFactory extends Factory
 {
-    protected $model = Coupon::class;
+    protected $model = Discount::class;
 
     public function definition(): array
     {
@@ -15,7 +16,8 @@ class CouponFactory extends Factory
         $end = (clone $start)->modify('+7 days');
 
         return [
-            'code' => strtoupper($this->faker->unique()->bothify('PROMO##')),
+            'product_id' => Product::factory(),
+            'description' => $this->faker->sentence(),
             'startDate' => $start->format('Y-m-d'),
             'endDate' => $end->format('Y-m-d'),
             'discountPercentage' => $this->faker->numberBetween(1, 50),

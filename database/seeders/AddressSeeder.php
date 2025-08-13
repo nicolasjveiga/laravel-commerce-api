@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User\User;
+use App\Models\User\Address;
 use Illuminate\Database\Seeder;
-use App\Models\Address;
-use App\Models\User;
 
 class AddressSeeder extends Seeder
 {

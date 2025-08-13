@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Discount;
 
-use App\Models\Coupon;
+use App\Models\Discount\Coupon;
 use App\Services\CouponService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Discount\CouponResource;

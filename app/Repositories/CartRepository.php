@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Product;
+use App\Models\Cart\Cart;
+use App\Models\Cart\CartItem;
+use App\Models\Catalog\Product;
 use Illuminate\Support\Facades\Auth;
 
 class CartRepository

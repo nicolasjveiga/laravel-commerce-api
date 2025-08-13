@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cart;
 
+use App\Models\User\User;
+use App\Models\Cart\CartItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

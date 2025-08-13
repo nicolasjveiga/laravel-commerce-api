@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cart;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Catalog\Product;
+use Illuminate\Database\Eloquent\Model; 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CartItem extends Model

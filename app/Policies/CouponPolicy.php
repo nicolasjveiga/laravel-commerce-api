@@ -2,9 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Coupon;
-use App\Models\User;
-
+use App\Models\Discount\Coupon;
+use App\Models\User\User;
 
 class CouponPolicy
 {

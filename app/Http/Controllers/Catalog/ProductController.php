@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Catalog;
 
-use App\Models\Product;
+use App\Models\Catalog\Product;
 use App\Services\ProductService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Catalog\ProductResource;

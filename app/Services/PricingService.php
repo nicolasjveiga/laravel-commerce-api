@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Coupon;
-use App\Models\Product;
+use App\Models\Discount\Coupon;
+use App\Models\Catalog\Product;
 use App\Exceptions\Order\InvalidCouponException;
 
 class PricingService
