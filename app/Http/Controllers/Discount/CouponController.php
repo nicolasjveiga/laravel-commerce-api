@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Discount;
 use App\Models\Coupon;
 use App\Services\CouponService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CouponResource;
+use App\Http\Resources\Discount\CouponResource;
 use App\Http\Requests\Coupon\StoreCouponRequest;
 use App\Http\Requests\Coupon\UpdateCouponRequest;
 

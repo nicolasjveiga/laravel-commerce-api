@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Discount;
 use App\Models\Discount;
 use App\Services\DiscountService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DiscountResource;
+use App\Http\Resources\Discount\DiscountResource;
 use App\Http\Requests\Discount\StoreDiscountRequest;
 use App\Http\Requests\Discount\UpdateDiscountRequest;
 

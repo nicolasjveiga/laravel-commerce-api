@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Discount;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CouponResource extends JsonResource
+class DiscountResource extends JsonResource
 {
+
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'code' => $this->code,
+            'product_id' => $this->product_id,
+            'description' => $this->description,
             'discountPercentage' => $this->discountPercentage,
             'startDate' => $this->startDate,
             'endDate' => $this->endDate

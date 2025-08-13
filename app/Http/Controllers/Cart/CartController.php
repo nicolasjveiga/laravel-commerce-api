@@ -6,7 +6,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Services\CartService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CartItemResource;
+use App\Http\Resources\Cart\CartItemResource;
 use App\Http\Requests\Cart\UpdateCartRequest;
 use App\Http\Requests\Cart\AddCartItemRequest;
 
