@@ -19,23 +19,17 @@ class CartRepository
         return $this->getOrCreateUserCart()->items()->with('product')->get();
     }
 
-    public function findCartItem(Cart $cart, int $id)
+    public function findCartItem(Cart $cart, int $productId)
     {
-        return $cart->items()->where('id', $id)->with('product')->first();
+        return $cart->items()->where('product_id', $productId)->with('product')->first();
     }
 
     public function createCartItem(Cart $cart, array $data): CartItem
     {
-        $product = Product::findOrFail($data['product_id']);
-
-        return $cart->items()->create([
-            'product_id' => $data['product_id'],
-            'quantity' => $data['quantity'],
-            'unitPrice' => $product->price,
-        ]);
+        return $cart->items()->create($data);
     }
 
-    public function updateCartItemQuantity(CartItem $item, int $quantity): CartItem
+    public function updateCartItem(CartItem $item, int $quantity): CartItem
     {
         $item->update(['quantity' => $quantity]);
         return $item;

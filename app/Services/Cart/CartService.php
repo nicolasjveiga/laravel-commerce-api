@@ -5,27 +5,39 @@ namespace App\Services\Cart;
 use App\Models\Cart\CartItem;
 use App\Models\Catalog\Product;
 use App\Models\Cart\Cart;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\Cart\CartRepository;
 
 class CartService
 {
+    protected CartRepository $cartRepo;
+
+    public function __construct(CartRepository $cartRepo)
+    {
+        $this->cartRepo = $cartRepo;
+    }
+
     public function getOrCreateUserCart(): Cart
     {
-        return Cart::firstOrCreate(['user_id' => Auth::id()]);
+        return $this->cartRepo->getOrCreateUserCart();
+    }
+
+    public function getCartItems()
+    {
+        return $this->cartRepo->getCartItems();
     }
 
     public function addItem(array $data): CartItem
     {
-        $cart = $this->getOrCreateUserCart();
+        $cart = $this->cartRepo->getOrCreateUserCart();
         
-        $item = $cart->items()->where('product_id', $data['product_id'])->first();
+        $item = $this->cartRepo->findCartItem($cart, $data['product_id']);
 
         if ($item) {
             $item->quantity += $data['quantity'];
             $item->save();
         } else {
             $product = Product::findOrFail($data['product_id']);
-            $item = $cart->items()->create([
+            $item = $this->cartRepo->createCartItem($cart, [
                 'product_id' => $data['product_id'],
                 'quantity' => $data['quantity'],
                 'unitPrice' => $product->price,
@@ -36,23 +48,19 @@ class CartService
 
     public function updateItem(CartItem $item, int $quantity): CartItem
     {
-        $item->update(['quantity' => $quantity]);
-        return $item;
+        $this->cartRepo->updateCartItem($item, $quantity);
+        return $item->fresh();
     }
 
     public function removeItem(CartItem $item): void
     {
-        $item->delete();
+        $this->cartRepo->deleteCartItem($item);
     }
 
     public function clearCart(): void
     {
-        $cart = $this->getOrCreateUserCart();
-        $cart->items()->delete();
+        $cart = $this->cartRepo->getOrCreateUserCart();
+        $this->cartRepo->clearCart($cart);
     }
 
-    public function getCartItems()
-    {
-        return $this->getOrCreateUserCart()->items()->with('product')->get();
-    }
 }
