@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Models\Catalog\Category;
-use App\Services\CategoryService;
+use App\Services\Catalog\CategoryService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Catalog\CategoryResource;
 use App\Http\Requests\Category\StoreCategoryRequest;

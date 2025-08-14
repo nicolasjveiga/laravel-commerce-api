@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User\User;
-use App\Services\UserService;
+use App\Services\User\UserService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\User\UpdateUserRequest;

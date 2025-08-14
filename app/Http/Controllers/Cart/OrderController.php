@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cart;
 
 use App\Models\Cart\Order;
-use App\Services\OrderService;
+use App\Services\Cart\OrderService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Cart\OrderResource;
 use App\Http\Requests\Order\StoreOrderRequest;

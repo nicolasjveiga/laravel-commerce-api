@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Services\Catalog;
+
+use App\Models\Catalog\Product;
+use App\Repositories\Catalog\ProductRepository;
+
+class ProductService
+{
+    protected $productRepo;
+
+    public function __construct(ProductRepository $productRepo)
+    {
+        $this->productRepo = $productRepo;
+    }
+
+    public function listAll()
+    {
+        return $this->productRepo->all();
+    }
+
+    public function show(Product $product)
+    {
+        return $this->productRepo->find($product);
+    }
+
+    public function create(array $data): Product
+    {
+        if(request()->hasFile('image')) {
+            $imagePath = request()->file('image')->store('products', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        return $this->productRepo->create($data);
+    }
+
+    public function update(Product $product, array $data): Product
+    {
+        return $this->productRepo->update($product, $data);
+    }
+
+    public function delete(Product $product): void
+    {
+        $this->productRepo->delete($product);
+    }
+}

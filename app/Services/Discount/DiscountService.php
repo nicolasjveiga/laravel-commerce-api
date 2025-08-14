@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Services\Discount;
+
+use App\Models\Discount\Discount;
+use App\Repositories\Discount\DiscountRepository;
+
+class DiscountService
+{
+    protected $discountRepo;
+
+    public function __construct(DiscountRepository $discountRepo)
+    {
+        $this->discountRepo = $discountRepo;
+    }
+
+    public function listAll()
+    {
+        return $this->discountRepo->all();
+    }
+
+    public function show(Discount $discount)
+    {
+        return $this->discountRepo->find($discount->id);
+    }
+
+    public function create(array $data): Discount
+    {
+        return $this->discountRepo->create($data);
+    }
+
+    public function update(Discount $discount, array $data): Discount
+    {
+        return $this->discountRepo->update($discount, $data);
+    }
+
+    public function delete(Discount $discount): void
+    {
+        $this->discountRepo->delete($discount);
+    }
+}

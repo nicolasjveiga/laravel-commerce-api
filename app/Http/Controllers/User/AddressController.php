@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\User\Address;
 use Illuminate\Http\Request;
-use App\Services\AddressService;
+use App\Services\User\AddressService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\AddressResource;
 use App\Http\Requests\Address\StoreAddressRequest;

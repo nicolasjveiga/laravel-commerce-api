@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Services\Discount;
+
+use App\Models\Discount\Coupon;
+use App\Repositories\Discount\CouponRepository;
+
+class CouponService
+{
+    protected $couponRepo;
+    
+    public function __construct(CouponRepository $couponRepo)
+    {
+        $this->couponRepo = $couponRepo;
+    }
+
+    public function listAll()
+    {
+        return $this->couponRepo->all();
+    }
+
+    public function show(Coupon $coupon)
+    {
+        return $this->couponRepo->find($coupon->id);
+    }
+
+    public function create(array $data): Coupon
+    {
+        return $this->couponRepo->create($data);
+    }
+
+    public function update(Coupon $coupon, array $data): Coupon
+    {
+        return $this->couponRepo->update($coupon, $data);
+    }
+
+    public function delete(Coupon $coupon): void
+    {
+        $this->couponRepo->delete($coupon);
+    }
+}

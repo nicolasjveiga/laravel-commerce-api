@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Discount;
 
 use App\Models\Discount\Discount;
-use App\Services\DiscountService;
+use App\Services\Discount\DiscountService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Discount\DiscountResource;
 use App\Http\Requests\Discount\StoreDiscountRequest;
