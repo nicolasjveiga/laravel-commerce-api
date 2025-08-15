@@ -34,7 +34,7 @@ class CartTest extends TestCase
         ]);
 
         $response->assertCreated()
-                 ->assertJsonFragment(['product_id' => $product->id, 'quantity' => 2]);
+                    ->assertJsonFragment(['product_id' => $product->id, 'quantity' => 2]);
     }
 
     public function test_user_can_view_cart()

@@ -29,7 +29,7 @@ class UserTest extends TestCase
         ]);
 
         $response->assertOk()
-                ->assertJsonCount(3);
+                ->assertJsonCount(3, 'data');
     }
 
     public function test_admin_can_view_user()
