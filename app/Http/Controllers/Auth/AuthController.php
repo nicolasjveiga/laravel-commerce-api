@@ -6,6 +6,7 @@ use App\Services\Auth\AuthService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Resources\Auth\AuthResource;
 
 class AuthController extends Controller
 {
@@ -22,7 +23,7 @@ class AuthController extends Controller
 
         $result = $this->authService->register($validated);
         
-        return response()->json($result, 201);
+        return new AuthResource($result);
     }
 
     public function registerMod(RegisterRequest $request)
@@ -31,7 +32,7 @@ class AuthController extends Controller
         
         $result = $this->authService->registerMod($validated);
         
-        return response()->json($result, 201);
+        return new AuthResource($result);
     }
 
     public function login(LoginRequest $request)
@@ -40,6 +41,6 @@ class AuthController extends Controller
         
         $result = $this->authService->login($validated);
         
-        return response()->json($result, 200);
+        return new AuthResource($result);
     }
 }

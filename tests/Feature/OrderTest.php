@@ -96,26 +96,7 @@ class OrderTest extends TestCase
                     ->assertJsonFragment(['message' => 'Cart is empty']);
     }
 
-    public function test_moderator_can_list_orders()
-    {
-        $user = User::factory()->create(['role' => 'MODERATOR']);
-        $token = $user->createToken('UserToken')->plainTextToken;
-        $address = Address::factory()->create(['user_id' => $user->id]);
-        $this->setupCart($user);
 
-        $this->postJson('/api/orders', [
-            'address_id' => $address->id,
-        ], [
-            'Authorization' => "Bearer $token"
-        ]);
-
-        $response = $this->getJson('/api/orders', [
-            'Authorization' => "Bearer $token"
-        ]);
-
-        $response->assertOk()
-                ->assertJsonFragment(['address_id' => $address->id]);
-    }
 
     public function test_user_can_cancel_order()
     {

@@ -7,6 +7,7 @@ use App\Services\User\UserService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Resources\User\UserResource;
 
 class UserController extends Controller
 {
@@ -23,7 +24,7 @@ class UserController extends Controller
 
         $users = $this->userService->listAll();
 
-        return response()->json($users, 200);
+        return UserResource::collection($users);
     }
 
     public function show(User $user)
@@ -32,7 +33,7 @@ class UserController extends Controller
 
         $user = $this->userService->show($user);
         
-        return response()->json($user, 200);
+        return new UserResource($user);
     }
 
     public function store(RegisterRequest $request)
@@ -43,7 +44,7 @@ class UserController extends Controller
 
         $user = $this->userService->create($validated);
         
-        return response()->json($user, 201);
+        return new UserResource($user);
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -54,7 +55,7 @@ class UserController extends Controller
 
         $user = $this->userService->update($user, $validated);
         
-        return response()->json($user, 200);
+        return new UserResource($user);
     }
 
     public function destroy(User $user)
