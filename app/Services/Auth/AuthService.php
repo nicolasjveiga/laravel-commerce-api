@@ -4,7 +4,8 @@ namespace App\Services\Auth;
 
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\User\UserRepository;
-use Illuminate\Validation\ValidationException;
+use App\Exceptions\Auth\UserNotFoundException;
+use App\Exceptions\Auth\InvalidCredentialsException;
 
 class AuthService
 {
@@ -37,10 +38,12 @@ class AuthService
     {
         $user = $this->userRepo->findByEmail($credentials['email']);
 
-        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        if (!$user){
+            throw new UserNotFoundException();
+        }
+
+        if (!Hash::check($credentials['password'], $user->password)) {
+            throw new InvalidCredentialsException();
         }
 
         $token = $user->createToken('UserToken')->plainTextToken;
