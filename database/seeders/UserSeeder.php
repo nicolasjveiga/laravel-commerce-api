@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'User Client 2',
-            'email' => 'user@email.com',
+            'email' => 'user2@email.com',
             'password' => Hash::make('senha123'),
             'role' => 'CLIENT',
         ]);

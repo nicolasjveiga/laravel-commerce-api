@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Address;
+use App\Models\User\User;
+use App\Models\User\Address;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AddressTest extends TestCase

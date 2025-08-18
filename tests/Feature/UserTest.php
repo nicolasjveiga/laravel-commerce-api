@@ -3,8 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
@@ -30,7 +29,7 @@ class UserTest extends TestCase
         ]);
 
         $response->assertOk()
-                ->assertJsonCount(3);
+                ->assertJsonCount(3, 'data');
     }
 
     public function test_admin_can_view_user()

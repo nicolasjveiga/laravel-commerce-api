@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Http\Controllers\Catalog;
+
+use App\Models\Catalog\Category;
+use App\Services\Catalog\CategoryService;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Catalog\CategoryResource;
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
+
+class CategoryController extends Controller
+{
+    protected $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
+    public function index()
+    {
+        $this->authorize('viewAny', Category::class);
+
+        $categories = $this->categoryService->listAll(); 
+        
+        return CategoryResource::collection($categories);
+    }
+
+    public function show(Category $category)
+    {
+        $this->authorize('view', $category);
+        
+        $category = $this->categoryService->show($category);
+        
+        return new CategoryResource($category);
+    }
+
+    public function store(StoreCategoryRequest $request)
+    {
+        $this->authorize('create', Category::class);
+        
+        $validated = $request->validated();
+
+        $category = $this->categoryService->create($validated);
+        
+        return new CategoryResource($category);
+    }
+
+    public function update(UpdateCategoryRequest $request, Category $category)
+    {
+        $this->authorize('update', $category);
+
+        $validated = $request->validated();
+
+        $category = $this->categoryService->update($category, $validated);
+        
+        return new CategoryResource($category);
+    }
+
+    public function destroy(Category $category)
+    {
+        $this->authorize('delete', $category);
+
+        $this->categoryService->delete($category);
+        
+        return response()->json(null, 204);
+    }
+}

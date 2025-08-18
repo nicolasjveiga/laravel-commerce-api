@@ -1,15 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\AddressController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Cart\CartController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Cart\OrderController;
+use App\Http\Controllers\User\AddressController;
+use App\Http\Controllers\Discount\CouponController;
+use App\Http\Controllers\Catalog\ProductController;
+use App\Http\Controllers\Catalog\CategoryController;
+use App\Http\Controllers\Discount\DiscountController;
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');

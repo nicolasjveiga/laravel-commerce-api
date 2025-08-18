@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\User\Address;
+use App\Policies\User\AddressPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use App\Models\Address;
-use App\Policies\AddressPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {

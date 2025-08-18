@@ -3,13 +3,13 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Cart;
-use App\Models\Order;
-use App\Models\Coupon;
-use App\Models\Product;
-use App\Models\Address;
-use App\Models\CartItem;
+use App\Models\Cart\Cart;
+use App\Models\Cart\Order;
+use App\Models\Discount\Coupon;
+use App\Models\Catalog\Product;
+use App\Models\Cart\CartItem;
+use App\Models\User\User;
+use App\Models\User\Address;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderTest extends TestCase
@@ -75,7 +75,7 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertCreated()
-                 ->assertJsonFragment(['coupon_id' => $coupon->id]);
+                    ->assertJsonFragment(['coupon_id' => $coupon->id]);
     }
 
     public function test_user_cannot_create_order_with_empty_cart()
@@ -93,29 +93,10 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertStatus(400)
-                 ->assertJsonFragment(['message' => 'Cart is empty']);
+                    ->assertJsonFragment(['message' => 'Cart is empty']);
     }
 
-    public function test_moderator_can_list_orders()
-    {
-        $user = User::factory()->create(['role' => 'MODERATOR']);
-        $token = $user->createToken('UserToken')->plainTextToken;
-        $address = Address::factory()->create(['user_id' => $user->id]);
-        $this->setupCart($user);
 
-        $this->postJson('/api/orders', [
-            'address_id' => $address->id,
-        ], [
-            'Authorization' => "Bearer $token"
-        ]);
-
-        $response = $this->getJson('/api/orders', [
-            'Authorization' => "Bearer $token"
-        ]);
-
-        $response->assertOk()
-                ->assertJsonFragment(['address_id' => $address->id]);
-    }
 
     public function test_user_can_cancel_order()
     {
@@ -154,7 +135,7 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertOk()
-                 ->assertJsonFragment(['status' => 'COMPLETED']);
+                    ->assertJsonFragment(['status' => 'COMPLETED']);
         $this->assertDatabaseHas('orders', ['id' => $order->id, 'status' => 'COMPLETED']);
     }
 

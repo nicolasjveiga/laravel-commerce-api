@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Product;
-use App\Models\Category;
+use App\Models\Catalog\Product;
+use App\Models\Catalog\Category;
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductAuthorizationTest extends TestCase

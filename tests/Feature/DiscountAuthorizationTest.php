@@ -3,10 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Product;
-use App\Models\Discount;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Catalog\Product;
+use App\Models\Discount\Discount;
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DiscountAuthorizationTest extends TestCase

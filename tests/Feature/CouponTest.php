@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Coupon;
+use App\Models\Discount\Coupon;
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CouponTest extends TestCase
@@ -33,7 +33,7 @@ class CouponTest extends TestCase
         ]);
 
         $response->assertCreated()
-                 ->assertJsonFragment(['code' => 'PROMO10']);
+                    ->assertJsonFragment(['code' => 'PROMO10']);
         $this->assertDatabaseHas('coupons', ['code' => 'PROMO10']);
     }
 
@@ -48,7 +48,7 @@ class CouponTest extends TestCase
         ]);
 
         $response->assertOk()
-                 ->assertJsonCount(2, 'data');
+                    ->assertJsonCount(2, 'data');
     }
 
     public function test_admin_can_update_coupon()
@@ -66,7 +66,7 @@ class CouponTest extends TestCase
         ]);
 
         $response->assertOk()
-                 ->assertJsonFragment(['discountPercentage' => 25]);
+                    ->assertJsonFragment(['discountPercentage' => 25]);
         $this->assertDatabaseHas('coupons', ['id' => $coupon->id, 'discountPercentage' => 25]);
     }
 

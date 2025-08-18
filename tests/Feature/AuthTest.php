@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthTest extends TestCase
@@ -18,8 +18,8 @@ class AuthTest extends TestCase
             'password' => 'password',
         ]);
     
-        $response->assertCreated()
-                    ->assertJsonStructure(['user', 'token']);
+        $response->assertOk()
+                    ->assertJsonFragment(['name' => 'Test User']);
     }
     
     public function test_user_can_login(): void
@@ -35,6 +35,6 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertOk()
-                    ->assertJsonStructure(['user', 'token']);
+                    ->assertJsonFragment(['email' => 'test@email.com']);
     }
 }

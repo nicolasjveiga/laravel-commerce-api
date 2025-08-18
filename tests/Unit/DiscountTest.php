@@ -4,14 +4,14 @@ namespace Tests\Unit;
 
 use Mockery;
 use ReflectionClass;
-use App\Models\Cart;
-use App\Models\Product;
-use App\Models\Discount;
-use App\Models\CartItem;
-use App\Services\OrderService;
+use App\Models\Cart\Cart;
+use App\Models\Catalog\Product;
+use App\Models\Discount\Discount;
+use App\Models\Cart\CartItem;
+use App\Services\Cart\OrderService;
 use PHPUnit\Framework\TestCase;
-use App\Services\PricingService;
-use App\Repositories\OrderRepository;
+use App\Services\Cart\PricingService;
+use App\Repositories\Cart\OrderRepository;
 
 class DiscountTest extends TestCase
 {
