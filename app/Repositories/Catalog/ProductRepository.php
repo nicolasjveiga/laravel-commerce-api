@@ -3,6 +3,7 @@
 namespace App\Repositories\Catalog;
 
 use App\Models\Catalog\Product;
+use App\Exceptions\Product\ProductInOrderException;
 
 class ProductRepository
 {
@@ -27,8 +28,13 @@ class ProductRepository
         return $product;
     }
 
+
     public function delete(Product $product): void
     {
+        if ($product->orderItems()->exists()) {
+            throw new ProductInOrderException();
+        }
+
         $product->delete();
     }
 }
