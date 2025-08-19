@@ -3,6 +3,7 @@
 namespace App\Repositories\Catalog;
 
 use App\Models\Catalog\Category;
+use App\Exceptions\Category\CategoryWithProductsException;
 
 class CategoryRepository
 {
@@ -29,6 +30,9 @@ class CategoryRepository
 
     public function delete(Category $category): void
     {
+        if ($category->products()->exists()) {
+            throw new CategoryWithProductsException();
+        }
         $category->delete();
     }
 }
