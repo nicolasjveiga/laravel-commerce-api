@@ -64,7 +64,7 @@ class ProductTest extends TestCase
             'name' => 'Product B',
         ]);
 
-        $response = $this->putJson("/api/products/{$product->id}", [
+        $response = $this->postJson("/api/products/{$product->id}", [
             'category_id' => $product->category_id,
             'name' => 'Product B Updated',
             'stock' => 20,

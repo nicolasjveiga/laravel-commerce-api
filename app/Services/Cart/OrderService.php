@@ -104,6 +104,10 @@ class OrderService
 
     public function getAllOrders()
     {
+        if(Auth::user()->role == 'CLIENT') {
+            return $this->orderRepo->getOrdersByUser(Auth::id());
+        }
+    
         return $this->orderRepo->getAllOrders();
     }
 }

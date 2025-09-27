@@ -24,18 +24,26 @@ class ProductService
         return $this->productRepo->find($product);
     }
 
-    public function create(array $data): Product
+    public function verifyImage(array $data)
     {
         if(request()->hasFile('image')) {
             $imagePath = request()->file('image')->store('products', 'public');
             $data['image'] = $imagePath;
         }
+        return $data;
+    }
+
+    public function create(array $data): Product
+    {
+        $data = $this->verifyImage($data);
 
         return $this->productRepo->create($data);
     }
 
     public function update(Product $product, array $data): Product
     {
+        $data = $this->verifyImage($data);
+
         return $this->productRepo->update($product, $data);
     }
 

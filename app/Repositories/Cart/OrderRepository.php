@@ -62,4 +62,9 @@ class OrderRepository
     {
         return Order::with('items.product')->get();
     }
+
+    public function getOrdersByUser($userId)
+    {
+        return Order::where('user_id', $userId)->with('items.product')->get();
+    }
 }

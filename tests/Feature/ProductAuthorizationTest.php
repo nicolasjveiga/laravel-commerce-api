@@ -46,7 +46,7 @@ class ProductAuthorizationTest extends TestCase
 
         $product = Product::factory()->create();
         
-        $response = $this->putJson("/api/products/{$product->id}", [
+        $response = $this->postJson("/api/products/{$product->id}", [
             'category_id' => $product->category_id,
             'name' => 'Product B Updated',
             'stock' => 20,
@@ -97,7 +97,7 @@ class ProductAuthorizationTest extends TestCase
 
         $product = Product::factory()->create();
         
-        $response = $this->putJson("/api/products/{$product->id}", [
+        $response = $this->postJson("/api/products/{$product->id}", [
             'category_id' => $product->category_id,
             'name' => 'Product B Updated',
             'stock' => 20,

@@ -9,7 +9,7 @@ class OrderPolicy
 {
     public function viewAny(User $user)
     {
-        return $user->isMod();
+        return true;
     }
 
     public function create()
